@@ -1,7 +1,7 @@
 import pygame
 import time
 import math
-from game.utils import scale_image, blit_rotate_center, blit_text_center
+from game.utilities import scale_image, blit_rotate_center, blit_text_center
 pygame.font.init()
 
 RED_CAR = scale_image(pygame.image.load("./imgs/red-car.png"), 0.55)
