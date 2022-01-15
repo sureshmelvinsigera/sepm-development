@@ -4,3 +4,4 @@
 /__pycache__/
 .gitattribuites
 .gitignore
+/game/__pycache__/
