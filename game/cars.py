@@ -2,20 +2,36 @@ import pygame
 import time
 import math
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
+import config
+
+con = config.con
+cur = con.cursor()
+
 pygame.font.init()
 
-RED_CAR = scale_image(pygame.image.load("./imgs/red-car.png"), 0.55)
-GREEN_CAR = scale_image(pygame.image.load("./imgs/green-car.png"), 0.55)
 
 class AbstractCar:
-    def __init__(self, max_vel, rotation_vel):
-        self.img = self.IMG
-        self.max_vel = max_vel
+
+    def __init__(self, car_id, start_position):
+        self.car_id = car_id
+        self.car_name = cur.execute("""SELECT car_name FROM cars WHERE car_id = ?""",
+                                    (self.car_id,)).fetchone()[0]
+        self.car_path = cur.execute("""SELECT car_path FROM cars WHERE car_id = ?""",
+                                    (self.car_id,)).fetchone()[0]
+        self.max_vel = cur.execute("""SELECT max_vel FROM cars WHERE car_id = ?""",
+                                    (self.car_id,)).fetchone()[0]
+        self.rotation_vel = cur.execute("""SELECT rotation_vel FROM cars WHERE car_id = ?""",
+                                    (self.car_id,)).fetchone()[0]
+        self.acceleration = cur.execute("""SELECT acceleration FROM cars WHERE car_id = ?""",
+                                    (self.car_id,)).fetchone()[0] / 10
+
+        self.img = scale_image(pygame.image.load(self.car_path), 0.55)
+
         self.vel = 0
-        self.rotation_vel = rotation_vel
         self.angle = 0
-        self.x, self.y = self.START_POS
-        self.acceleration = 0.1
+
+        self.start_position = start_position
+        self.x, self.y = self.start_position
 
     def rotate(self, left=False, right=False):
         if left:
@@ -49,14 +65,12 @@ class AbstractCar:
         return poi
 
     def reset(self):
-        self.x, self.y = self.START_POS
+        self.x, self.y = self.start_position
         self.angle = 0
         self.vel = 0
 
 
 class PlayerCar(AbstractCar):
-    IMG = RED_CAR
-    START_POS = (180, 200)
 
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceleration / 2, 0)
@@ -68,14 +82,12 @@ class PlayerCar(AbstractCar):
 
 
 class ComputerCar(AbstractCar):
-    IMG = GREEN_CAR
-    START_POS = (150, 200)
 
-    def __init__(self, max_vel, rotation_vel, path=[]):
-        super().__init__(max_vel, rotation_vel)
+    def __init__(self, car_id, start_position, path=[]):
+        super().__init__(car_id, start_position)
         self.path = path
         self.current_point = 0
-        self.vel = max_vel
+        self.vel = self.max_vel // 1.25
 
     def draw_points(self, win):
         for point in self.path:
