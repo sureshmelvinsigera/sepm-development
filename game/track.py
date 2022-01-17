@@ -1,9 +1,6 @@
 import pygame
 from game.utilities import scale_image
-import config
-
-con = config.con
-cur = con.cursor()
+from config import con, cur
 
 
 class Track:

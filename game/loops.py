@@ -4,6 +4,7 @@ import math
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
 from game.cars import PlayerCar, ComputerCar
 from game.track import Track
+from config import con, cur
 
 pygame.font.init()
 
@@ -151,7 +152,11 @@ def settings_loop(run, clock, track, player_car, computer_car, game_info, images
     while run:
         clock.tick(FPS)
 
-        game_info.win.fill((0, 0, 0))
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
 
         back_button = pygame.Rect(50, 50, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), back_button)
@@ -193,7 +198,11 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images)
     while run:
         clock.tick(FPS)
 
-        game_info.win.fill((0, 0, 0))
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
 
         back_button = pygame.Rect(50, 50, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), back_button)
@@ -231,22 +240,18 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images)
         if green_button.collidepoint(pygame.mouse.get_pos()):
             if click:
                 player_car = PlayerCar('green_car', track.player_start_position)
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
         if purple_button.collidepoint(pygame.mouse.get_pos()):
             if click:
                 player_car = PlayerCar('purple_car', track.player_start_position)
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
         if red_button.collidepoint(pygame.mouse.get_pos()):
             if click:
                 player_car = PlayerCar('red_car', track.player_start_position)
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
         if white_button.collidepoint(pygame.mouse.get_pos()):
             if click:
                 player_car = PlayerCar('white_car', track.player_start_position)
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 
@@ -255,7 +260,11 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
     while run:
         clock.tick(FPS)
 
-        game_info.win.fill((0, 0, 0))
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
 
         back_button = pygame.Rect(50, 50, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), back_button)
@@ -282,7 +291,48 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
             if click:
                 track = Track('track_1')
                 player_car.start_position = track.player_start_position
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
+                computer_car.start_position = track.computer_start_position
+
+        pygame.display.update()
+
+
+def high_scores(run, clock, track, player_car, computer_car, game_info, images):
+    while run:
+        clock.tick(FPS)
+
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
+
+        back_button = pygame.Rect(50, 50, 200, 50)
+        pygame.draw.rect(game_info.win, (255, 0, 0), back_button)
+        menu_button_text(game_info, 'Back', 50, 50)
+
+        menu_title(game_info, "High Scores")
+
+        top_scores = cur.execute("""SELECT name, time FROM high_scores WHERE track_id = ? ORDER BY time LIMIT 5""",
+                                 (track.track_id,)).fetchall()
+
+        x, y, z = 200, 200, 1
+        for name, time in top_scores:
+            menu_button_text(game_info, f"{z}.", x - 100, y)
+            menu_button_text(game_info, name, x, y)
+            menu_button_text(game_info, str(round(time, 3)), x + 250, y)
+            y+=100
+
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click = True
+
+        if back_button.collidepoint(pygame.mouse.get_pos()):
+            if click:
+                main_menu(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 
@@ -291,7 +341,11 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images):
     while run:
         clock.tick(FPS)
 
-        game_info.win.fill((0, 0, 0))
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
 
         menu_title(game_info, 'Main Menu')
 
@@ -302,6 +356,10 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images):
         settings_button = pygame.Rect(300, 300, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), settings_button)
         menu_button_text(game_info, 'Settings', 300, 300)
+
+        high_scores_button = pygame.Rect(300, 400, 200, 50)
+        pygame.draw.rect(game_info.win, (255, 0, 0), high_scores_button)
+        menu_button_text(game_info, 'High Scores', 300, 400)
 
         click = False
         for event in pygame.event.get():
@@ -317,6 +375,10 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images):
         if settings_button.collidepoint(pygame.mouse.get_pos()):
             if click:
                 settings_loop(run, clock, track, player_car, computer_car, game_info, images)
+
+        if high_scores_button.collidepoint(pygame.mouse.get_pos()):
+            if click:
+                high_scores(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 

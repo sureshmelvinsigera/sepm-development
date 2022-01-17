@@ -1,7 +1,4 @@
-import config
-
-con = config.con
-cur = con.cursor()
+from config import con, cur
 
 
 def create_tracks():
@@ -52,6 +49,26 @@ def create_cars():
     con.commit()
 
 
+def create_high_scores():
+    cur.execute("""CREATE TABLE high_scores
+                    (
+                    name text,
+                    time real,
+                    track_id text
+                    )
+                """)
+
+    high_scores_list = [('test name', 24.50392, 'track_1'),
+                        ('NAME', 22.3541, 'track_1'),
+                        ('name 123', 12345, 'track_1'),
+                        ('Lewis', 1.23, 'track_1'),
+                        ('Max', 20.22, 'track_1'), ]
+
+    cur.executemany("""INSERT INTO high_scores VALUES (?, ?, ?)""", high_scores_list)
+    con.commit()
+
+
 def build_db():
     create_tracks()
     create_cars()
+    create_high_scores()

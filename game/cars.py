@@ -2,10 +2,8 @@ import pygame
 import time
 import math
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
-import config
+from config import con, cur
 
-con = config.con
-cur = con.cursor()
 
 pygame.font.init()
 
