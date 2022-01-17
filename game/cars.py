@@ -80,6 +80,24 @@ class PlayerCar(AbstractCar):
         self.vel = -self.vel
         self.move()
 
+    def move_player(self):
+        keys = pygame.key.get_pressed()
+        moved = False
+
+        if keys[pygame.K_LEFT]:
+            self.rotate(left=True)
+        if keys[pygame.K_RIGHT]:
+            self.rotate(right=True)
+        if keys[pygame.K_UP]:
+            moved = True
+            self.move_forward()
+        if keys[pygame.K_DOWN]:
+            moved = True
+            self.move_backward()
+
+        if not moved:
+            self.reduce_speed()
+
 
 class ComputerCar(AbstractCar):
 
