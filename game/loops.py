@@ -60,18 +60,6 @@ def menu_title(game_info, menu_name):
     game_info.win.blit(text, text_rect)
 
 
-def draw_main(images, player_car, computer_car, game_info):
-    for img, pos in images:
-        game_info.win.blit(img, pos)
-
-    time_text = game_info.main_font.render(f"Time: {game_info.get_level_time()}s", 1, (255, 255, 255))
-    game_info.win.blit(time_text, (10, game_info.height - time_text.get_height() - 40))
-
-    computer_car.draw(game_info.win)
-    player_car.draw(game_info.win)
-    pygame.display.update()
-
-
 def handle_collision(track, player_car, computer_car, game_info):
     if player_car.collide(track.border_mask) != None:
         player_car.bounce()
