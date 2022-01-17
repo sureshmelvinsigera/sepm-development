@@ -100,6 +100,7 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images):
 
         computer_car.draw(game_info.win)
         player_car.draw(game_info.win)
+
         main_menu_button = pygame.Rect(10, 10, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), main_menu_button)
         menu_button_text(game_info, 'Menu', 10, 10)
@@ -115,7 +116,6 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    break
 
                 if event.type == pygame.KEYDOWN:
                     game_info.start_level()
@@ -132,12 +132,9 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
-                break
-
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                click = True
 
         if main_menu_button.collidepoint(pygame.mouse.get_pos()):
             if click:
@@ -175,8 +172,7 @@ def settings_loop(run, clock, track, player_car, computer_car, game_info, images
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                click = True
 
         if back_button.collidepoint(pygame.mouse.get_pos()):
             if click:
@@ -226,8 +222,7 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images)
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                click = True
 
         if back_button.collidepoint(pygame.mouse.get_pos()):
             if click:
@@ -277,8 +272,7 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                click = True
 
         if back_button.collidepoint(pygame.mouse.get_pos()):
             if click:
@@ -314,8 +308,7 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images):
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
+                click = True
 
         if play_button.collidepoint(pygame.mouse.get_pos()):
             if click:
