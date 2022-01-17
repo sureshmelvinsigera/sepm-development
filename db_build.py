@@ -58,9 +58,9 @@ def create_high_scores():
                     )
                 """)
 
-    high_scores_list = [('test name', 24.50392, 'track_1'),
+    high_scores_list = [('testname', 24.50392, 'track_1'),
                         ('NAME', 22.3541, 'track_1'),
-                        ('name 123', 12345, 'track_1'),
+                        ('name123', 12345, 'track_1'),
                         ('Lewis', 1.23, 'track_1'),
                         ('Max', 20.22, 'track_1'), ]
 
