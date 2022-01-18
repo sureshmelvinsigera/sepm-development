@@ -27,6 +27,9 @@ class Track:
         self.finish_y = cur.execute("""SELECT finish_y FROM tracks WHERE track_id = ?""",
                                        (self.track_id,)).fetchone()[0]
 
+        self.track_record = cur.execute("""SELECT time FROM high_scores WHERE track_id = ? ORDER BY time""",
+                                       (self.track_id,)).fetchone()[0]
+
         self.track_image = scale_image(pygame.image.load(self.track_path), 0.9)
         self.border_image = scale_image(pygame.image.load(self.border_path), 0.9)
         self.border_mask = pygame.mask.from_surface(self.border_image)
