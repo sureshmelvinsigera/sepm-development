@@ -47,9 +47,8 @@ class GameInfo:
         return round(time.time() - self.level_start_time)
 
 
-def high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images):
+def high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images, time):
     name = ''
-    time = game_info.get_level_time()
 
     while run:
         clock.tick(FPS)
@@ -151,12 +150,13 @@ def handle_collision(run, clock, track, player_car, computer_car, game_info, ima
             player_car.bounce()
         else:
             blit_text_center(game_info.win, game_info.main_font, "You Win!")
+            time = game_info.get_level_time()
             pygame.display.update()
             pygame.time.wait(5000)
             game_info.reset()
             player_car.reset()
             computer_car.reset()
-            high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images)
+            high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images, time)
 
 
 def game_loop(run, clock, track, player_car, computer_car, game_info, images):
@@ -288,21 +288,61 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images)
 
         menu_title(game_info, "Cars")
 
-        green_button = pygame.Rect(300, 200, 200, 50)
+        green_button = pygame.Rect(50, 200, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), green_button)
-        menu_button_text(game_info, 'Green', 300, 200)
+        menu_button_text(game_info, 'Green', 50, 200)
+        green_stats = cur.execute(
+                                """
+                                SELECT max_vel, rotation_vel, acceleration
+                                FROM cars 
+                                WHERE car_id = 'green_car'
+                                """
+                                ).fetchall()
 
-        purple_button = pygame.Rect(300, 300, 200, 50)
+        for speed, hand, acc in green_stats:
+            menu_button_text(game_info, f"Speed:{speed}    Hand:{hand}    Acc:{acc}", 220, 200)
+
+        purple_button = pygame.Rect(50, 300, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), purple_button)
-        menu_button_text(game_info, 'Purple', 300, 300)
+        menu_button_text(game_info, 'Purple', 50, 300)
+        purple_stats = cur.execute(
+                                """
+                                SELECT max_vel, rotation_vel, acceleration
+                                FROM cars
+                                WHERE car_id = 'purple_car'
+                                """
+                                ).fetchall()
 
-        red_button = pygame.Rect(300, 400, 200, 50)
+        for speed, hand, acc in purple_stats:
+            menu_button_text(game_info, f"Speed:{speed}    Hand:{hand}    Acc:{acc}", 200, 300)
+
+        red_button = pygame.Rect(50, 400, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), red_button)
-        menu_button_text(game_info, 'Red', 300, 400)
+        menu_button_text(game_info, 'Red', 50, 400)
+        red_stats = cur.execute(
+                                """
+                                SELECT max_vel, rotation_vel, acceleration
+                                FROM cars
+                                WHERE car_id = 'red_car'
+                                """
+                                ).fetchall()
 
-        white_button = pygame.Rect(300, 500, 200, 50)
+        for speed, hand, acc in red_stats:
+            menu_button_text(game_info, f"Speed:{speed}    Hand:{hand}    Acc:{acc}", 200, 400)
+
+        white_button = pygame.Rect(50, 500, 200, 50)
         pygame.draw.rect(game_info.win, (255, 0, 0), white_button)
-        menu_button_text(game_info, 'White', 300, 500)
+        menu_button_text(game_info, 'White', 50, 500)
+        white_stats = cur.execute(
+                                """
+                                SELECT max_vel, rotation_vel, acceleration
+                                FROM cars
+                                WHERE car_id = 'white_car'
+                                """
+                                ).fetchall()
+
+        for speed, hand, acc in white_stats:
+            menu_button_text(game_info, f"Speed:{speed}    Hand:{hand}    Acc:{acc}", 200, 500)
 
         click = False
         for event in pygame.event.get():
@@ -404,7 +444,7 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images):
             menu_button_text(game_info, f"{z}.", x - 100, y)
             menu_button_text(game_info, name, x, y)
             menu_button_text(game_info, str(round(time, 3)), x + 250, y)
-            y+=100
+            y += 100
 
 
         click = False
