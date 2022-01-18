@@ -192,14 +192,13 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images):
                     game_info.start_level()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                        click = True
+                    click = True
 
-                if main_menu_button.collidepoint(pygame.mouse.get_pos()):
-                    if click:
-                        game_info.reset()
-                        player_car.reset()
-                        computer_car.reset()
-                        main_menu(run, clock, track, player_car, computer_car, game_info, images)
+                if main_menu_button.collidepoint(pygame.mouse.get_pos()) and click:
+                    game_info.reset()
+                    player_car.reset()
+                    computer_car.reset()
+                    main_menu(run, clock, track, player_car, computer_car, game_info, images)
 
         click = False
 
@@ -209,12 +208,11 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if main_menu_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_info.reset()
-                player_car.reset()
-                computer_car.reset()
-                main_menu(run, clock, track, player_car, computer_car, game_info, images)
+        if main_menu_button.collidepoint(pygame.mouse.get_pos()) and click:
+            game_info.reset()
+            player_car.reset()
+            computer_car.reset()
+            main_menu(run, clock, track, player_car, computer_car, game_info, images)
 
         player_car.move_player()
         computer_car.move()
@@ -254,20 +252,14 @@ def settings_loop(run, clock, track, player_car, computer_car, game_info, images
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if back_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_info.reset()
-                player_car.reset()
-                computer_car.reset()
-                main_menu(run, clock, track, player_car, computer_car, game_info, images)
+        if back_button.collidepoint(pygame.mouse.get_pos()) and click:
+            main_menu(run, clock, track, player_car, computer_car, game_info, images)
 
-        if car_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                car_settings(run, clock, track, player_car, computer_car, game_info, images)
+        if car_button.collidepoint(pygame.mouse.get_pos()) and click:
+            car_settings(run, clock, track, player_car, computer_car, game_info, images)
 
-        if track_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                track_settings(run, clock, track, player_car, computer_car, game_info, images)
+        if track_button.collidepoint(pygame.mouse.get_pos()) and click:
+            track_settings(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 
@@ -351,28 +343,20 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if back_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_info.reset()
-                player_car.reset()
-                computer_car.reset()
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
+        if back_button.collidepoint(pygame.mouse.get_pos()) and click:
+            settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
-        if green_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                player_car = PlayerCar('green_car', track.player_start_position)
+        if green_button.collidepoint(pygame.mouse.get_pos()) and click:
+            player_car = PlayerCar('green_car', track.player_start_position)
 
-        if purple_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                player_car = PlayerCar('purple_car', track.player_start_position)
+        if purple_button.collidepoint(pygame.mouse.get_pos()) and click:
+            player_car = PlayerCar('purple_car', track.player_start_position)
 
-        if red_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                player_car = PlayerCar('red_car', track.player_start_position)
+        if red_button.collidepoint(pygame.mouse.get_pos()) and click:
+            player_car = PlayerCar('red_car', track.player_start_position)
 
-        if white_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                player_car = PlayerCar('white_car', track.player_start_position)
+        if white_button.collidepoint(pygame.mouse.get_pos()) and click:
+            player_car = PlayerCar('white_car', track.player_start_position)
 
         pygame.display.update()
 
@@ -404,15 +388,10 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if back_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_info.reset()
-                player_car.reset()
-                computer_car.reset()
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
+        if back_button.collidepoint(pygame.mouse.get_pos()) and click:
+            settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
-        if track_1_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
+        if track_1_button.collidepoint(pygame.mouse.get_pos()) and click:
                 track = Track('track_1')
                 player_car.start_position = track.player_start_position
                 computer_car.start_position = track.computer_start_position
@@ -439,13 +418,13 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images):
         top_scores = cur.execute("""SELECT name, time FROM high_scores WHERE track_id = ? ORDER BY time LIMIT 5""",
                                  (track.track_id,)).fetchall()
 
-        x, y, z = 200, 200, 1
+        x, y, score_pos = 200, 200, 1
         for name, time in top_scores:
-            menu_button_text(game_info, f"{z}.", x - 100, y)
+            menu_button_text(game_info, f"{score_pos}.", x - 100, y)
             menu_button_text(game_info, name, x, y)
             menu_button_text(game_info, str(round(time, 3)), x + 250, y)
             y += 100
-
+            score_pos += 1
 
         click = False
         for event in pygame.event.get():
@@ -454,12 +433,8 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if back_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_info.reset()
-                player_car.reset()
-                computer_car.reset()
-                main_menu(run, clock, track, player_car, computer_car, game_info, images)
+        if back_button.collidepoint(pygame.mouse.get_pos()) and click:
+            main_menu(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 
@@ -495,17 +470,14 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 click = True
 
-        if play_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                game_loop(run, clock, track, player_car, computer_car, game_info, images)
+        if play_button.collidepoint(pygame.mouse.get_pos()) and click:
+            game_loop(run, clock, track, player_car, computer_car, game_info, images)
 
-        if settings_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                settings_loop(run, clock, track, player_car, computer_car, game_info, images)
+        if settings_button.collidepoint(pygame.mouse.get_pos()) and click:
+            settings_loop(run, clock, track, player_car, computer_car, game_info, images)
 
-        if high_scores_button.collidepoint(pygame.mouse.get_pos()):
-            if click:
-                high_scores(run, clock, track, player_car, computer_car, game_info, images)
+        if high_scores_button.collidepoint(pygame.mouse.get_pos()) and click:
+            high_scores(run, clock, track, player_car, computer_car, game_info, images)
 
         pygame.display.update()
 
