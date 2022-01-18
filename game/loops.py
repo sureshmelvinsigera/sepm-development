@@ -162,7 +162,8 @@ def handle_collision(run, clock, track, player_car, computer_car, game_info, ima
         pygame.time.wait(5000)
         game_info.reset()
         player_car.reset()
-        computer_car.reset()
+        computer_car = ComputerCar('grey_car', track.computer_start_position, PATH)
+        game_loop(run, clock, track, player_car, computer_car, game_info, images)
 
     player_finish_poi_collide = player_car.collide(
         track.finish_mask, *track.finish_position)
@@ -176,7 +177,7 @@ def handle_collision(run, clock, track, player_car, computer_car, game_info, ima
             pygame.time.wait(5000)
             game_info.reset()
             player_car.reset()
-            computer_car.reset()
+            computer_car = ComputerCar('grey_car', track.computer_start_position, PATH)
             high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images, time)
 
 
