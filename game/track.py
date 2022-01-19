@@ -29,6 +29,15 @@ class Track:
 
         self.track_record = cur.execute("""SELECT time FROM high_scores WHERE track_id = ? ORDER BY time""",
                                        (self.track_id,)).fetchone()[0]
+        self.computer_path = cur.execute(
+                                        """
+                                        SELECT path_x, path_y
+                                        FROM computer_paths 
+                                        WHERE track_id = ? 
+                                        ORDER BY path_order
+                                        """,
+                                        (self.track_id,)
+                                         ).fetchall()
 
         self.track_image = scale_image(pygame.image.load(self.track_path), 0.9)
         self.border_image = scale_image(pygame.image.load(self.border_path), 0.9)
