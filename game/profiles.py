@@ -15,8 +15,10 @@ class PlayerProfile:
     def update_mute(self):
         if self.mute:
             self.mute = 0
+            pygame.mixer.music.unpause()
         else:
             self.mute = 1
+            pygame.mixer.music.pause()
 
         if self.username != 'default':
             cur.execute("""UPDATE player_profiles SET mute = ? WHERE username = ?""",
