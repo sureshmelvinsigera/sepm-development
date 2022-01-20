@@ -81,6 +81,20 @@ class Button:
         self.button_text()
 
 
+def menu_button_text(game_info, button_text, x, y):
+    text = game_info.main_font.render(button_text.upper(), 1, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.topleft = (x, y)
+    game_info.win.blit(text, text_rect)
+
+
+def menu_title(game_info, menu_name):
+    text = game_info.main_font.render(menu_name.upper(), 1, (255, 255, 255))
+    text_rect = text.get_rect()
+    text_rect.topleft = (game_info.win.get_width()/2 - text.get_width()/2, 10)
+    game_info.win.blit(text, text_rect)
+
+
 def menu_basic(run, clock, track, player_car, computer_car, game_info, images, player_profile,
                menu_name, previous_menu):
 
@@ -135,20 +149,6 @@ def menu_basic(run, clock, track, player_car, computer_car, game_info, images, p
         game_info.win.blit(time_text, (10, game_info.height - time_text.get_height()))
 
     return click
-
-
-def menu_button_text(game_info, button_text, x, y):
-    text = game_info.main_font.render(button_text.upper(), 1, (255, 255, 255))
-    text_rect = text.get_rect()
-    text_rect.topleft = (x, y)
-    game_info.win.blit(text, text_rect)
-
-
-def menu_title(game_info, menu_name):
-    text = game_info.main_font.render(menu_name.upper(), 1, (255, 255, 255))
-    text_rect = text.get_rect()
-    text_rect.topleft = (game_info.win.get_width()/2 - text.get_width()/2, 10)
-    game_info.win.blit(text, text_rect)
 
 
 def high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images, time, player_profile):
@@ -268,14 +268,6 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images, pl
                 main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
             blit_text_center(game_info.win, game_info.main_font, "Press any key to start!")
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    click = True
-                if event.type == pygame.KEYDOWN:
-                    game_info.start_level()
 
             pygame.display.update()
 
