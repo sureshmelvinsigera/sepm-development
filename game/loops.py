@@ -78,6 +78,55 @@ class Button:
         self.button_text()
 
 
+def menu_basic(run, clock, track, player_car, computer_car, game_info, images, player_profile, menu_name):
+    click = False
+
+    for img, pos in images:
+        game_info.win.blit(img, pos)
+
+    computer_car.draw(game_info.win)
+    player_car.draw(game_info.win)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            click = True
+
+    menu_title(game_info, menu_name)
+
+    mute = 'mute'
+    if player_profile.mute:
+        mute = 'unmute'
+
+    mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
+
+    if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+        player_profile.update_mute()
+
+    if menu_name != 'main menu':
+        main_menu_button = Button(game_info, 'main menu', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
+        if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            game_info.reset()
+            player_car.reset()
+            computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
+            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
+        if menu_name != 'game':
+            back_button = Button(game_info, 'Back', (255, 255, 255), 10, 70, 200, 50, (255, 0, 0))
+            if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
+    if menu_name == 'game':
+        time_text = game_info.main_font.render(f"Time: {game_info.get_level_time()}s", 1, (255, 255, 255))
+        game_info.win.blit(time_text, (10, game_info.height - time_text.get_height() - 40))
+
+        time_text = game_info.main_font.render(f"Record: {track.track_record}s", 1, (255, 255, 255))
+        game_info.win.blit(time_text, (10, game_info.height - time_text.get_height()))
+
+    return click
+
+
 def menu_button_text(game_info, button_text, x, y):
     text = game_info.main_font.render(button_text.upper(), 1, (255, 255, 255))
     text_rect = text.get_rect()
@@ -201,74 +250,23 @@ def game_loop(run, clock, track, player_car, computer_car, game_info, images, pl
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        time_text = game_info.main_font.render(f"Time: {game_info.get_level_time()}s", 1, (255, 255, 255))
-        game_info.win.blit(time_text, (10, game_info.height - time_text.get_height() - 40))
-
-        time_text = game_info.main_font.render(f"Record: {track.track_record}s", 1, (255, 255, 255))
-        game_info.win.blit(time_text, (10, game_info.height - time_text.get_height()))
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        main_menu_button = Button(game_info, 'menu', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        pygame.display.update()
+        menu_basic(run, clock, track, player_car, computer_car, game_info, images, player_profile, 'game')
 
         while not game_info.started:
             blit_text_center(game_info.win, game_info.main_font, "Press any key to start!")
-            pygame.display.update()
-
-            click = False
 
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-
                 if event.type == pygame.KEYDOWN:
                     game_info.start_level()
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    click = True
-
-                if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                    player_profile.update_mute()
-
-                if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                    game_info.reset()
-                    player_car.reset()
-                    computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
-                    main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        click = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
-        if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            game_info.reset()
-            player_car.reset()
-            computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
-            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+            pygame.display.update()
 
         player_car.move_player()
         computer_car.move()
 
         handle_collision(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
+        pygame.display.update()
 
 
 def settings_loop(run, clock, track, player_car, computer_car, game_info, images, player_profile):
@@ -276,41 +274,14 @@ def settings_loop(run, clock, track, player_car, computer_car, game_info, images
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        back_button = Button(game_info, 'Back', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, "Settings")
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'settings')
 
         car_button = Button(game_info, 'car', (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
-        track_button = Button(game_info, 'track', (255, 255, 255), 300, 300, 200, 50, (255, 0, 0))
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
         if car_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             car_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
+        track_button = Button(game_info, 'track', (255, 255, 255), 300, 300, 200, 50, (255, 0, 0))
         if track_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             track_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
@@ -321,21 +292,8 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images,
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        back_button = Button(game_info, 'Back', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, "Cars")
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'cars')
 
         all_cars = cur.execute(
             """
@@ -357,19 +315,6 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images,
             menu_button_text(game_info, f"Speed:{max_vel}    Hand:{rotation_vel}    Acc:{acceleration}", 200, stats_y)
             y += 100
 
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            settings_loop(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
         for button in car_buttons:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 id = car_ids[car_buttons.index(button)]
@@ -383,42 +328,39 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'tracks')
 
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
+        all_tracks = cur.execute(
+            """
+            SELECT track_id, track_name
+            FROM tracks
+            """
+        ).fetchall()
 
-        back_button = Button(game_info, 'Back', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
+        track_buttons = []
+        track_ids = []
+        y = 200
+        for track in all_tracks:
+            track_id, track_name = track
+            track_ids.append(track_id)
+            button = Button(game_info, track_name, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
+            track_buttons.append(button)
+            y += 100
 
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
+        for button in track_buttons:
+            if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                id = track_ids[track_buttons.index(button)]
+                track = Track(id)
+                player_profile.update_last_track_id(track.track_id)
 
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, "Tracks")
-
-        track_1_button = Button(game_info, 'Track 1', (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            settings_loop(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
+        '''track_1_button = Button(game_info, 'Track 1', (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
 
         if track_1_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             track = Track('track_1')
             player_profile.update_last_track_id(track.track_id)
             player_car.start_position = track.player_start_position
-            computer_car.start_position = track.computer_start_position
+            computer_car.start_position = track.computer_start_position'''
 
         pygame.display.update()
 
@@ -427,21 +369,8 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images, 
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        back_button = Button(game_info, 'Back', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, "High Scores")
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'high scores')
 
         top_scores = cur.execute(
                                 """
@@ -462,19 +391,6 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images, 
             y += 100
             score_pos += 1
 
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
         pygame.display.update()
 
 
@@ -483,23 +399,12 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        back_button = Button(game_info, 'Back', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, "Profiles")
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'create profile')
 
         create_profile_button = Button(game_info, 'create profile', (255, 255, 255), 300, 100, 200, 50, (255, 0, 0))
+        if create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            create_profile(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
         all_profiles = cur.execute(
             """
@@ -514,22 +419,6 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
             for username in profile:
                 profile_buttons.append(Button(game_info, username, (255, 255, 255), 300, y, 200, 50, (255, 0, 0)))
                 y += 100
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
-        if create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            create_profile(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
         for button in profile_buttons:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
@@ -546,38 +435,19 @@ def create_profile(run, clock, track, player_car, computer_car, game_info, image
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        main_menu_button = Button(game_info, 'menu', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
-
-        done_button = Button(game_info, 'done', (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
-
-        menu_title(game_info, 'Create profile')
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'create profile')
 
         menu_button_text(game_info, 'enter new username', 300, 200)
 
-        name_entry_box_button = Button(game_info, name, (255, 255, 255), 300, 300, 200, 50, (0, 0, 0))
+        name_entry_box = Button(game_info, name, (255, 255, 255), 300, 300, 200, 50, (0, 0, 0))
 
-        click = False
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
 
             if event.type == pygame.KEYDOWN:
+
                 if event.key == pygame.K_RETURN:
+
                     if len(name) != 0 \
                             and name not in cur.execute("""SELECT username FROM player_profiles""").fetchall():
                         cur.execute("""INSERT INTO player_profiles VALUES (?, ?, ?, ?)""",
@@ -592,15 +462,7 @@ def create_profile(run, clock, track, player_car, computer_car, game_info, image
                 elif len(name) < 8:
                     name += event.unicode
 
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
-        if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            game_info.reset()
-            player_car.reset()
-            computer_car.reset()
-            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
-
+        done_button = Button(game_info, 'done', (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if len(name) != 0 \
                     and name not in cur.execute("""SELECT username FROM player_profiles""").fetchall():
@@ -617,44 +479,22 @@ def main_menu(run, clock, track, player_car, computer_car, game_info, images, pl
     while run:
         clock.tick(FPS)
 
-        for img, pos in images:
-            game_info.win.blit(img, pos)
-
-        computer_car.draw(game_info.win)
-        player_car.draw(game_info.win)
-
-        menu_title(game_info, 'Main Menu')
-
-        mute = 'mute'
-        if player_profile.mute:
-            mute = 'unmute'
-
-        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
+        click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
+                           player_profile, 'main menu')
 
         play_button = Button(game_info, 'Play', (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
-        settings_button = Button(game_info, 'Settings', (255, 255, 255), 300, 300, 200, 50, (255, 0, 0))
-        high_scores_button = Button(game_info, 'High Scores', (255, 255, 255), 300, 400, 200, 50, (255, 0, 0))
-        profiles_button = Button(game_info, 'profiles', (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click = True
-
-        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-            player_profile.update_mute()
-
         if play_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             game_loop(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
+        settings_button = Button(game_info, 'Settings', (255, 255, 255), 300, 300, 200, 50, (255, 0, 0))
         if settings_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             settings_loop(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
+        high_scores_button = Button(game_info, 'High Scores', (255, 255, 255), 300, 400, 200, 50, (255, 0, 0))
         if high_scores_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             high_scores(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
+        profiles_button = Button(game_info, 'profiles', (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
         if profiles_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             profiles_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
