@@ -85,7 +85,7 @@ def menu_button_text(game_info, button_text, x, y):
 def menu_title(game_info, menu_name):
     text = game_info.main_font.render(menu_name.upper(), 1, (255, 255, 255))
     text_rect = text.get_rect()
-    text_rect.topleft = (300, 50)
+    text_rect.topleft = (game_info.win.get_width()/2 - text.get_width()/2, 10)
     game_info.win.blit(text, text_rect)
 
 
@@ -496,6 +496,8 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
 
         menu_title(game_info, "Profiles")
 
+        create_profile_button = Button(game_info, 'create profile', (255, 255, 255), 300, 100, 200, 50, (255, 0, 0))
+
         all_profiles = cur.execute(
             """
             SELECT username
@@ -523,12 +525,87 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
         if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             player_profile.update_mute()
 
+        if create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            create_profile(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
         for button in profile_buttons:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 player_profile = PlayerProfile(button.text.lower())
                 track = Track(player_profile.last_track_id)
                 player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
                 computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
+
+        pygame.display.update()
+
+
+def create_profile(run, clock, track, player_car, computer_car, game_info, images, player_profile):
+    name = ''
+    while run:
+        clock.tick(FPS)
+
+        for img, pos in images:
+            game_info.win.blit(img, pos)
+
+        computer_car.draw(game_info.win)
+        player_car.draw(game_info.win)
+
+        main_menu_button = Button(game_info, 'menu', (255, 255, 255), 10, 10, 200, 50, (255, 0, 0))
+
+        mute = 'mute'
+        if player_profile.mute:
+            mute = 'unmute'
+
+        mute_button = Button(game_info, mute, (255, 255, 255), 600, 10, 200, 50, (255, 0, 0))
+
+        done_button = Button(game_info, 'done', (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
+
+        menu_title(game_info, 'Create profile')
+
+        menu_button_text(game_info, 'enter new username', 300, 200)
+
+        name_entry_box_button = Button(game_info, name, (255, 255, 255), 300, 300, 200, 50, (0, 0, 0))
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click = True
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if len(name) != 0 \
+                            and name not in cur.execute("""SELECT username FROM player_profiles""").fetchall():
+                        cur.execute("""INSERT INTO player_profiles VALUES (?, ?, ?, ?)""",
+                                    (name, player_profile.mute, player_car.car_id, track.track_id))
+                        con.commit()
+                        player_profile = PlayerProfile(name)
+                        profiles_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
+                elif event.key == pygame.K_BACKSPACE:
+                    name = name[:-1]
+
+                elif len(name) < 8:
+                    name += event.unicode
+
+        if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            player_profile.update_mute()
+
+        if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            game_info.reset()
+            player_car.reset()
+            computer_car.reset()
+            main_menu(run, clock, track, player_car, computer_car, game_info, images, player_profile)
+
+        if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            if len(name) != 0 \
+                    and name not in cur.execute("""SELECT username FROM player_profiles""").fetchall():
+                cur.execute("""INSERT INTO player_profiles VALUES (?, ?, ?, ?)""",
+                            (name, player_profile.mute, player_car.car_id, track.track_id))
+                con.commit()
+                player_profile = PlayerProfile(name)
+                profiles_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
         pygame.display.update()
 
