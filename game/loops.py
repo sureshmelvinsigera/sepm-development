@@ -2,7 +2,7 @@ import pygame
 import time
 import math
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
-from game.cars import PlayerCar, ComputerCar, AbstractCar
+from game.cars import PlayerCar, ComputerCar
 from game.track import Track
 from game.profiles import PlayerProfile
 from config import con, cur

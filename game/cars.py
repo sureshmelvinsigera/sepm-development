@@ -5,10 +5,7 @@ from game.utilities import scale_image, blit_rotate_center, blit_text_center
 from config import con, cur
 
 
-pygame.font.init()
-
-
-class AbstractCar:
+class Car:
 
     def __init__(self, car_id, start_position):
         self.car_id = car_id
@@ -31,22 +28,8 @@ class AbstractCar:
         self.start_position = start_position
         self.x, self.y = self.start_position
 
-    def rotate(self, left=False, right=False):
-        if left:
-            self.angle += self.rotation_vel
-        elif right:
-            self.angle -= self.rotation_vel
-
     def draw(self, win):
         blit_rotate_center(win, self.img, (self.x, self.y), self.angle)
-
-    def move_forward(self):
-        self.vel = min(self.vel + self.acceleration, self.max_vel)
-        self.move()
-
-    def move_backward(self):
-        self.vel = max(self.vel - self.acceleration, -self.max_vel/2)
-        self.move()
 
     def move(self):
         radians = math.radians(self.angle)
@@ -68,14 +51,14 @@ class AbstractCar:
         self.vel = 0
 
 
-class PlayerCar(AbstractCar):
+class PlayerCar(Car):
 
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceleration / 2, 0)
         self.move()
 
     def bounce(self):
-        self.vel = -self.vel
+        self.vel = -self.vel/2
         self.move()
 
     def move_player(self):
@@ -83,21 +66,24 @@ class PlayerCar(AbstractCar):
         moved = False
 
         if keys[pygame.K_LEFT]:
-            self.rotate(left=True)
+            self.angle += self.rotation_vel
         if keys[pygame.K_RIGHT]:
-            self.rotate(right=True)
+            self.angle -= self.rotation_vel
         if keys[pygame.K_UP]:
             moved = True
-            self.move_forward()
+            self.vel = min(self.vel + self.acceleration, self.max_vel)
+            self.move()
         if keys[pygame.K_DOWN]:
             moved = True
-            self.move_backward()
+            self.vel = max(self.vel - self.acceleration, -self.max_vel / 2)
+            self.move()
 
         if not moved:
-            self.reduce_speed()
+            self.vel = max(self.vel - self.acceleration / 2, 0)
+            self.move()
 
 
-class ComputerCar(AbstractCar):
+class ComputerCar(Car):
 
     def __init__(self, car_id, start_position, path=[]):
         super().__init__(car_id, start_position)
@@ -111,7 +97,6 @@ class ComputerCar(AbstractCar):
 
     def draw(self, win):
         super().draw(win)
-        # self.draw_points(win)
 
     def calculate_angle(self):
         target_x, target_y = self.path[self.current_point]
