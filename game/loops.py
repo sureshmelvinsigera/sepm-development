@@ -151,6 +151,25 @@ def menu_basic(run, clock, track, player_car, computer_car, game_info, images, p
     return click
 
 
+def menu_bottom_nav_buttons(start_index, all_list, game_info, click):
+    width, height = 150, 30
+    if start_index + 5 < len(all_list):
+        next_button = Button(game_info, 'next', (255, 255, 255),
+                             game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
+                             150, 30, (255, 0, 0), False)
+        if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            start_index += 5
+
+    if start_index > 0:
+        previous_button = Button(game_info, 'previous', (255, 255, 255),
+                                 10, game_info.win.get_height() - height - 10,
+                                 150, 30, (255, 0, 0), False)
+        if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+            start_index -= 5
+
+    return start_index
+
+
 def high_score_name_entry(run, clock, track, player_car, computer_car, game_info, images, time, player_profile):
     if player_profile.username == 'default':
         name = ''
@@ -334,20 +353,7 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images,
                 player_car = PlayerCar(id, track.player_start_position)
                 player_profile.update_last_car_id(player_car.car_id)
 
-        width, height = 150, 30
-        if start_index + 5 < len(all_cars):
-            next_button = Button(game_info, 'next', (255, 255, 255),
-                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
-                                 150, 30, (255, 0, 0), False)
-            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index += 5
-
-        if start_index > 0:
-            previous_button = Button(game_info, 'previous', (255, 255, 255),
-                                     10, game_info.win.get_height() - height - 10,
-                                     150, 30, (255, 0, 0), False)
-            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index -= 5
+        start_index = menu_bottom_nav_buttons(start_index, all_cars, game_info, click)
 
         pygame.display.update()
 
@@ -385,20 +391,7 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
                 track = Track(id)
                 player_profile.update_last_track_id(track.track_id)
 
-        width, height = 150, 30
-        if start_index + 5 < len(all_tracks):
-            next_button = Button(game_info, 'next', (255, 255, 255),
-                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
-                                 150, 30, (255, 0, 0), False)
-            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index += 5
-
-        if start_index > 0:
-            previous_button = Button(game_info, 'previous', (255, 255, 255),
-                                     10, game_info.win.get_height() - height - 10,
-                                     150, 30, (255, 0, 0), False)
-            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index -= 5
+        start_index = menu_bottom_nav_buttons(start_index, all_tracks, game_info, click)
 
         pygame.display.update()
 
@@ -467,20 +460,7 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
                 player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
                 computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
 
-        width, height = 150, 30
-        if start_index + 5 < len(all_profiles):
-            next_button = Button(game_info, 'next', (255, 255, 255),
-                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
-                                 150, 30, (255, 0, 0), False)
-            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index += 5
-
-        if start_index > 0:
-            previous_button = Button(game_info, 'previous', (255, 255, 255),
-                                     10, game_info.win.get_height() - height - 10,
-                                     150, 30, (255, 0, 0), False)
-            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
-                start_index -= 5
+        start_index = menu_bottom_nav_buttons(start_index, all_profiles, game_info, click)
 
         pygame.display.update()
 
