@@ -299,24 +299,27 @@ def settings_loop(run, clock, track, player_car, computer_car, game_info, images
 
 
 def car_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile):
+    all_cars = cur.execute(
+        """
+        SELECT car_id, car_name, max_vel, rotation_vel, acceleration
+        FROM cars
+        WHERE car_id != 'grey_car'
+        ORDER BY car_name
+        """
+    ).fetchall()
+
+    start_index = 0
+
     while run:
         clock.tick(FPS)
 
         click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
                            player_profile, 'cars', 'settings')
 
-        all_cars = cur.execute(
-            """
-            SELECT car_id, car_name, max_vel, rotation_vel, acceleration
-            FROM cars
-            WHERE car_id != 'grey_car'
-            """
-        ).fetchall()
-
         car_buttons = []
         car_ids = []
         y = 200
-        for car in all_cars:
+        for car in all_cars[start_index: min(len(all_cars), start_index+5)]:
             car_id, car_name, max_vel, rotation_vel, acceleration = car
             car_ids.append(car_id)
             button = Button(game_info, car_name, (255, 255, 255), 10, y, 200, 50, (255, 0, 0))
@@ -331,27 +334,45 @@ def car_settings(run, clock, track, player_car, computer_car, game_info, images,
                 player_car = PlayerCar(id, track.player_start_position)
                 player_profile.update_last_car_id(player_car.car_id)
 
+        width, height = 150, 30
+        if start_index + 5 < len(all_cars):
+            next_button = Button(game_info, 'next', (255, 255, 255),
+                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
+                                 150, 30, (255, 0, 0), False)
+            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index += 5
+
+        if start_index > 0:
+            previous_button = Button(game_info, 'previous', (255, 255, 255),
+                                     10, game_info.win.get_height() - height - 10,
+                                     150, 30, (255, 0, 0), False)
+            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index -= 5
+
         pygame.display.update()
 
 
 def track_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile):
+    all_tracks = cur.execute(
+        """
+        SELECT track_id, track_name
+        FROM tracks
+        ORDER BY track_name
+        """
+    ).fetchall()
+
+    start_index = 0
+
     while run:
         clock.tick(FPS)
 
         click = menu_basic(run, clock, track, player_car, computer_car, game_info, images,
                            player_profile, 'tracks', 'settings')
 
-        all_tracks = cur.execute(
-            """
-            SELECT track_id, track_name
-            FROM tracks
-            """
-        ).fetchall()
-
         track_buttons = []
         track_ids = []
         y = 200
-        for each_track in all_tracks:
+        for each_track in all_tracks[start_index: min(len(all_tracks), start_index+5)]:
             track_id, track_name = each_track
             track_ids.append(track_id)
             button = Button(game_info, track_name, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
@@ -363,6 +384,21 @@ def track_settings(run, clock, track, player_car, computer_car, game_info, image
                 id = track_ids[track_buttons.index(button)]
                 track = Track(id)
                 player_profile.update_last_track_id(track.track_id)
+
+        width, height = 150, 30
+        if start_index + 5 < len(all_tracks):
+            next_button = Button(game_info, 'next', (255, 255, 255),
+                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
+                                 150, 30, (255, 0, 0), False)
+            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index += 5
+
+        if start_index > 0:
+            previous_button = Button(game_info, 'previous', (255, 255, 255),
+                                     10, game_info.win.get_height() - height - 10,
+                                     150, 30, (255, 0, 0), False)
+            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index -= 5
 
         pygame.display.update()
 
@@ -397,6 +433,15 @@ def high_scores(run, clock, track, player_car, computer_car, game_info, images, 
 
 
 def profiles_settings(run, clock, track, player_car, computer_car, game_info, images, player_profile):
+    all_profiles = cur.execute(
+        """
+        SELECT username
+        FROM player_profiles
+        ORDER BY username
+        """
+    ).fetchall()
+
+    start_index = 0
 
     while run:
         clock.tick(FPS)
@@ -408,16 +453,9 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
         if create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             create_profile(run, clock, track, player_car, computer_car, game_info, images, player_profile)
 
-        all_profiles = cur.execute(
-            """
-            SELECT username
-            FROM player_profiles
-            """
-        ).fetchall()
-
         profile_buttons = []
         y = 200
-        for profile in all_profiles:
+        for profile in all_profiles[start_index: min(len(all_profiles), start_index+5)]:
             for username in profile:
                 profile_buttons.append(Button(game_info, username, (255, 255, 255), 300, y, 200, 50, (255, 0, 0)))
                 y += 100
@@ -428,6 +466,21 @@ def profiles_settings(run, clock, track, player_car, computer_car, game_info, im
                 track = Track(player_profile.last_track_id)
                 player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
                 computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
+
+        width, height = 150, 30
+        if start_index + 5 < len(all_profiles):
+            next_button = Button(game_info, 'next', (255, 255, 255),
+                                 game_info.win.get_width() - width - 10, game_info.win.get_height() - height - 10,
+                                 150, 30, (255, 0, 0), False)
+            if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index += 5
+
+        if start_index > 0:
+            previous_button = Button(game_info, 'previous', (255, 255, 255),
+                                     10, game_info.win.get_height() - height - 10,
+                                     150, 30, (255, 0, 0), False)
+            if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
+                start_index -= 5
 
         pygame.display.update()
 

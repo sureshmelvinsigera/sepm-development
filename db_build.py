@@ -104,7 +104,20 @@ def create_player_profiles():
     player_profiles_list = [('default', 0, 'red_car', 'track_1'),
                             ('username', 0, 'red_car', 'track_1'),
                             ('user123', 1, 'green_car', 'track_1'),
-                            ('test name', 0, 'purple_car', 'track_1'), ]
+                            ('test name', 0, 'purple_car', 'track_1'),
+                            ('default23', 0, 'red_car', 'track_1'),
+                            ('abc123', 0, 'red_car', 'track_1'),
+                            ('xyz987', 1, 'green_car', 'track_1'),
+                            ('testing', 0, 'purple_car', 'track_1'),
+                            ('max', 0, 'red_car', 'track_1'),
+                            ('lewis', 0, 'red_car', 'track_1'),
+                            ('mike', 1, 'green_car', 'track_1'),
+                            ('alex', 0, 'purple_car', 'track_1'),
+                            ('kieron', 0, 'red_car', 'track_1'),
+                            ('kike', 0, 'red_car', 'track_1'),
+                            ('suresh', 1, 'green_car', 'track_1'),
+                            ('antonios', 0, 'purple_car', 'track_1'),
+                            ]
 
     cur.executemany("""INSERT INTO player_profiles VALUES (?, ?, ?, ?)""", player_profiles_list)
     con.commit()
