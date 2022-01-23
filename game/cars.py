@@ -1,6 +1,6 @@
 import pygame
 import time
-import math
+from math import sin, cos, tan, atan, pi, degrees, radians
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
 from config import con, cur
 
@@ -20,7 +20,7 @@ class Car:
         self.acceleration = cur.execute("""SELECT acceleration FROM cars WHERE car_id = ?""",
                                     (self.car_id,)).fetchone()[0] / 10
 
-        self.img = scale_image(pygame.image.load(self.car_path), 0.55)
+        self.car_image = scale_image(pygame.image.load(self.car_path), 0.55)
 
         self.vel = 0
         self.angle = 0
@@ -29,18 +29,17 @@ class Car:
         self.x, self.y = self.start_position
 
     def draw(self, win):
-        blit_rotate_center(win, self.img, (self.x, self.y), self.angle)
+        blit_rotate_center(win, self.car_image, (self.x, self.y), self.angle)
 
     def move(self):
-        radians = math.radians(self.angle)
-        vertical = math.cos(radians) * self.vel
-        horizontal = math.sin(radians) * self.vel
+        vertical = cos(radians(self.angle)) * self.vel
+        horizontal = sin(radians(self.angle)) * self.vel
 
         self.y -= vertical
         self.x -= horizontal
 
     def collide(self, mask, x=0, y=0):
-        car_mask = pygame.mask.from_surface(self.img)
+        car_mask = pygame.mask.from_surface(self.car_image)
         offset = (int(self.x - x), int(self.y - y))
         poi = mask.overlap(car_mask, offset)
         return poi
@@ -104,14 +103,14 @@ class ComputerCar(Car):
         y_diff = target_y - self.y
 
         if y_diff == 0:
-            desired_radian_angle = math.pi / 2
+            desired_radian_angle = pi / 2
         else:
-            desired_radian_angle = math.atan(x_diff / y_diff)
+            desired_radian_angle = atan(x_diff / y_diff)
 
         if target_y > self.y:
-            desired_radian_angle += math.pi
+            desired_radian_angle += pi
 
-        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        difference_in_angle = self.angle - degrees(desired_radian_angle)
         if difference_in_angle >= 180:
             difference_in_angle -= 360
 
@@ -123,7 +122,7 @@ class ComputerCar(Car):
     def update_path_point(self):
         target = self.path[self.current_point]
         rect = pygame.Rect(
-            self.x, self.y, self.img.get_width(), self.img.get_height())
+            self.x, self.y, self.car_image.get_width(), self.car_image.get_height())
         if rect.collidepoint(*target):
             self.current_point += 1
 

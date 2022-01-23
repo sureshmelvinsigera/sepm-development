@@ -242,19 +242,17 @@ def handle_collision(clock, track, player_car, computer_car, game_info,  player_
     if player_car.collide(track.border_mask) != None:
         player_car.bounce()
 
-    computer_finish_poi_collide = computer_car.collide(
-        track.finish_mask, *track.finish_position)
+    computer_finish_poi_collide = computer_car.collide(track.finish_mask, track.finish_x, track.finish_y)
     if computer_finish_poi_collide != None:
         blit_text_center(WIN, MAIN_FONT, "You lost!")
         pygame.display.update()
-        pygame.time.wait(5000)
+        pygame.time.wait(2000)
         game_info.reset()
         player_car.reset()
         computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
         game_loop(clock, track, player_car, computer_car, game_info,  player_profile)
 
-    player_finish_poi_collide = player_car.collide(
-        track.finish_mask, *track.finish_position)
+    player_finish_poi_collide = player_car.collide(track.finish_mask, track.finish_x, track.finish_y)
     if player_finish_poi_collide != None:
         if player_finish_poi_collide[1] == 0:
             player_car.bounce()
@@ -262,7 +260,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info,  player_
             blit_text_center(WIN, MAIN_FONT, "You Win!")
             time = game_info.get_level_time()
             pygame.display.update()
-            pygame.time.wait(5000)
+            pygame.time.wait(2000)
             game_info.reset()
             player_car.reset()
             computer_car = ComputerCar('grey_car', track.computer_start_position, track.computer_path)
