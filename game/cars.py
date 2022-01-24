@@ -6,19 +6,26 @@ from config import con, cur
 
 
 class Car:
-
     def __init__(self, car_id, start_position):
         self.car_id = car_id
-        self.car_name = cur.execute("""SELECT car_name FROM cars WHERE car_id = ?""",
-                                    (self.car_id,)).fetchone()[0]
-        self.car_path = cur.execute("""SELECT car_path FROM cars WHERE car_id = ?""",
-                                    (self.car_id,)).fetchone()[0]
-        self.max_vel = cur.execute("""SELECT max_vel FROM cars WHERE car_id = ?""",
-                                    (self.car_id,)).fetchone()[0]
-        self.rotation_vel = cur.execute("""SELECT rotation_vel FROM cars WHERE car_id = ?""",
-                                    (self.car_id,)).fetchone()[0]
-        self.acceleration = cur.execute("""SELECT acceleration FROM cars WHERE car_id = ?""",
-                                    (self.car_id,)).fetchone()[0] / 10
+        self.car_name = cur.execute(
+            """SELECT car_name FROM cars WHERE car_id = ?""", (self.car_id,)
+        ).fetchone()[0]
+        self.car_path = cur.execute(
+            """SELECT car_path FROM cars WHERE car_id = ?""", (self.car_id,)
+        ).fetchone()[0]
+        self.max_vel = cur.execute(
+            """SELECT max_vel FROM cars WHERE car_id = ?""", (self.car_id,)
+        ).fetchone()[0]
+        self.rotation_vel = cur.execute(
+            """SELECT rotation_vel FROM cars WHERE car_id = ?""", (self.car_id,)
+        ).fetchone()[0]
+        self.acceleration = (
+            cur.execute(
+                """SELECT acceleration FROM cars WHERE car_id = ?""", (self.car_id,)
+            ).fetchone()[0]
+            / 10
+        )
 
         self.car_image = scale_image(pygame.image.load(self.car_path), 0.55)
 
@@ -51,13 +58,12 @@ class Car:
 
 
 class PlayerCar(Car):
-
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceleration / 2, 0)
         self.move()
 
     def bounce(self):
-        self.vel = -self.vel/2
+        self.vel = -self.vel / 2
         self.move()
 
     def move_player(self):
@@ -83,7 +89,6 @@ class PlayerCar(Car):
 
 
 class ComputerCar(Car):
-
     def __init__(self, car_id, start_position, path=[]):
         super().__init__(car_id, start_position)
         self.path = path
@@ -122,7 +127,8 @@ class ComputerCar(Car):
     def update_path_point(self):
         target = self.path[self.current_point]
         rect = pygame.Rect(
-            self.x, self.y, self.car_image.get_width(), self.car_image.get_height())
+            self.x, self.y, self.car_image.get_width(), self.car_image.get_height()
+        )
         if rect.collidepoint(*target):
             self.current_point += 1
 
