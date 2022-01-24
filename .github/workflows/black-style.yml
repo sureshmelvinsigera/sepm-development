@@ -3,10 +3,10 @@ name: "Style repository using Black"
 on:
   push:
     branches:
-      - kh/github-workflows
+      - main
   pull_request:
     branches:
-      - kh/github-workflows
+      - main
 
 jobs:
   lint-code:
@@ -21,23 +21,8 @@ jobs:
             options: "--verbose"
             src: "./"
 
-
-      - name: 'Comment PR'
-        uses: actions/github-script@0.3.0
-        if: github.event_name == 'pull_request'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: 'Automatically restyled using Black!' });
-
       - name: "Push Restyled Changes"
         uses: EndBug/add-and-commit@v8 # You can change this to use a specific version.
         with:
-          # The message for the commit.
-          # Default: 'Commit from GitHub Actions (name of the workflow)'
           message: 'Restyled code'
-
-          # Whether to push the commit and, if any, its tags to the repo. It can also be used to set the git push arguments (see the paragraph below for more info)
-          # Default: true
           push: true
