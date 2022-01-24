@@ -24,9 +24,9 @@ def create_tracks():
         (
             "track_1",
             "Track 1",
-            "imgs/track.png",
-            "imgs/track-border.png",
-            "imgs/grass.jpg",
+            "assets/img/track.png",
+            "assets/img/track-border.png",
+            "assets/img/grass.jpg",
             180,
             200,
             150,
@@ -57,11 +57,11 @@ def create_cars():
     )
 
     car_list = [
-        ("red_car", "Red", "imgs/red-car.png", 4, 4, 1),
-        ("green_car", "Green", "imgs/green-car.png", 4, 4, 1),
-        ("grey_car", "Grey", "imgs/grey-car.png", 4, 4, 1),
-        ("purple_car", "Purple", "imgs/purple-car.png", 4, 4, 1),
-        ("white_car", "White", "imgs/white-car.png", 4, 4, 1),
+        ("red_car", "Red", "assets/img/red-car.png", 4, 4, 1),
+        ("green_car", "Green", "assets/img/green-car.png", 4, 4, 1),
+        ("grey_car", "Grey", "assets/img/grey-car.png", 4, 4, 1),
+        ("purple_car", "Purple", "assets/img/purple-car.png", 4, 4, 1),
+        ("white_car", "White", "assets/img/white-car.png", 4, 4, 1),
     ]
 
     cur.executemany("""INSERT INTO cars VALUES (?, ?, ?, ?, ?, ?)""", car_list)

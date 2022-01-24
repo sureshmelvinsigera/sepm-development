@@ -9,7 +9,7 @@ from config import con, cur
 
 pygame.font.init()
 pygame.mixer.init()
-pygame.mixer.music.load("./sounds/theme.wav")
+pygame.mixer.music.load("assets/audio/theme.wav")
 pygame.mixer.music.play(-1)
 
 WIDTH, HEIGHT = 800, 800
