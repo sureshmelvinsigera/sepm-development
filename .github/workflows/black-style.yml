@@ -17,6 +17,10 @@ jobs:
 
       - name: "Lint Python Code"
         uses: psf/black@stable
+        with:
+            options: "--verbose"
+            src: "./"
+
 
       - name: 'Comment PR'
         uses: actions/github-script@0.3.0
@@ -32,7 +36,7 @@ jobs:
         with:
           # The message for the commit.
           # Default: 'Commit from GitHub Actions (name of the workflow)'
-          message: 'Code has been restyled by black!'
+          message: 'Restyled code'
 
           # Whether to push the commit and, if any, its tags to the repo. It can also be used to set the git push arguments (see the paragraph below for more info)
           # Default: true
