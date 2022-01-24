@@ -183,7 +183,10 @@ def menu_basic(
             game_info.reset()
             player_car.reset()
             computer_car = ComputerCar(
-                "grey_car", track.computer_start_position, track.computer_path
+                "grey_car",
+                track.computer_start_position,
+                track.computer_path,
+                track.track_record,
             )
             main_menu(clock, track, player_car, computer_car, game_info, player_profile)
 
@@ -352,7 +355,10 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
         game_info.reset()
         player_car.reset()
         computer_car = ComputerCar(
-            "grey_car", track.computer_start_position, track.computer_path
+            "grey_car",
+            track.computer_start_position,
+            track.computer_path,
+            track.track_record,
         )
         game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
@@ -370,7 +376,10 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             game_info.reset()
             player_car.reset()
             computer_car = ComputerCar(
-                "grey_car", track.computer_start_position, track.computer_path
+                "grey_car",
+                track.computer_start_position,
+                track.computer_path,
+                track.track_record,
             )
             high_score_name_entry(
                 clock, track, player_car, computer_car, game_info, time, player_profile
@@ -439,7 +448,10 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
                 game_info.reset()
                 player_car.reset()
                 computer_car = ComputerCar(
-                    "grey_car", track.computer_start_position, track.computer_path
+                    "grey_car",
+                    track.computer_start_position,
+                    track.computer_path,
+                    track.track_record,
                 )
                 main_menu(
                     clock, track, player_car, computer_car, game_info, player_profile
@@ -725,7 +737,10 @@ def profiles_settings(
                     player_profile.last_car_id, track.player_start_position
                 )
                 computer_car = ComputerCar(
-                    "grey_car", track.computer_start_position, track.computer_path
+                    "grey_car",
+                    track.computer_start_position,
+                    track.computer_path,
+                    track.track_record,
                 )
 
         start_index = menu_bottom_nav_buttons(start_index, all_profiles, click)
@@ -888,7 +903,10 @@ def main_game_loop():
     player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
 
     computer_car = ComputerCar(
-        "grey_car", track.computer_start_position, track.computer_path
+        "grey_car",
+        track.computer_start_position,
+        track.computer_path,
+        track.track_record,
     )
 
     game_info = GameInfo()

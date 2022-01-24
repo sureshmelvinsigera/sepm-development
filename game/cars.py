@@ -1,6 +1,6 @@
 import pygame
 import time
-from math import sin, cos, tan, atan, pi, degrees, radians
+from math import sin, cos, tan, atan, pi, degrees, radians, sqrt
 from game.utilities import scale_image, blit_rotate_center, blit_text_center
 from config import con, cur
 
@@ -89,11 +89,33 @@ class PlayerCar(Car):
 
 
 class ComputerCar(Car):
-    def __init__(self, car_id, start_position, path=[]):
+    def __init__(self, car_id, start_position, path, track_record):
         super().__init__(car_id, start_position)
         self.path = path
         self.current_point = 0
+        self.track_record = track_record
         self.vel = self.max_vel // 1.25
+        # self.calculate_vel()
+
+    """def calculate_vel(self):
+        i = 0
+        j = 1
+        path_with_start = self.path
+        path_with_start.insert(0, self.start_position)
+        total_distance = 0
+
+        while j < len(path_with_start):
+            x_1, y_1 = path_with_start[i]
+            x_2, y_2 = path_with_start[j]
+            x_delta = x_1 - x_2
+            y_delta = y_1 - y_2
+            distance = sqrt(x_delta**2 + y_delta**2)
+            total_distance += distance
+            i += 1
+            j += 1
+
+        self.vel = total_distance / self.track_record
+        print(self.vel)"""
 
     def draw_points(self, win):
         for point in self.path:
