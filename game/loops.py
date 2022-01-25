@@ -356,6 +356,8 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
         pygame.time.wait(2000)
         game_info.reset()
         player_car.reset()
+        track_id = track.track_id
+        track = Track(track_id)
         computer_car = ComputerCar(
             "grey_car",
             track.computer_start_position,
@@ -377,6 +379,8 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             pygame.time.wait(2000)
             game_info.reset()
             player_car.reset()
+            track_id = track.track_id
+            track = Track(track_id)
             computer_car = ComputerCar(
                 "grey_car",
                 track.computer_start_position,

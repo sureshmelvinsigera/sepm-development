@@ -126,6 +126,7 @@ class ComputerCar(Car):
             self.vel = min(new_vel, 3.95)
         else:
             self.vel = 3.95
+        print(self.vel)
 
     def draw_points(self, win):
         for point in self.path:
