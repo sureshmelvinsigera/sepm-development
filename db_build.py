@@ -84,7 +84,7 @@ def create_high_scores():
         ("NAME", 55, "track_1"),
         ("name123", 44, "track_1"),
         ("Lewis", 48, "track_1"),
-        ("Max", 43, "track_1"),
+        ("Max", 40, "track_1"),
     ]
 
     cur.executemany("""INSERT INTO high_scores VALUES (?, ?, ?)""", high_scores_list)

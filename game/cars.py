@@ -94,10 +94,12 @@ class ComputerCar(Car):
         self.path = path
         self.current_point = 0
         self.track_record = track_record
-        self.vel = self.max_vel // 1.25
-        # self.calculate_vel()
+        self.path_length = 0
+        self.distance_travelled = 0
+        self.calculate_path_length()
+        self.vel = 0
 
-    """def calculate_vel(self):
+    def calculate_path_length(self):
         i = 0
         j = 1
         path_with_start = self.path
@@ -109,13 +111,22 @@ class ComputerCar(Car):
             x_2, y_2 = path_with_start[j]
             x_delta = x_1 - x_2
             y_delta = y_1 - y_2
-            distance = sqrt(x_delta**2 + y_delta**2)
+            distance = sqrt(x_delta ** 2 + y_delta ** 2)
             total_distance += distance
             i += 1
             j += 1
 
-        self.vel = total_distance / self.track_record
-        print(self.vel)"""
+        self.path_length = total_distance
+
+    def calculate_vel(self, fps, current_time):
+        if current_time < self.track_record:
+            new_vel = (self.path_length - self.distance_travelled) / (
+                (self.track_record - current_time) * fps
+            )
+            self.vel = min(new_vel, 3.95)
+            print(self.vel)
+        else:
+            self.vel = 3.95
 
     def draw_points(self, win):
         for point in self.path:
@@ -126,13 +137,13 @@ class ComputerCar(Car):
 
     def calculate_angle(self):
         target_x, target_y = self.path[self.current_point]
-        x_diff = target_x - self.x
-        y_diff = target_y - self.y
+        x_delta = target_x - self.x
+        y_delta = target_y - self.y
 
-        if y_diff == 0:
+        if y_delta == 0:
             desired_radian_angle = pi / 2
         else:
-            desired_radian_angle = atan(x_diff / y_diff)
+            desired_radian_angle = atan(x_delta / y_delta)
 
         if target_y > self.y:
             desired_radian_angle += pi
@@ -152,15 +163,20 @@ class ComputerCar(Car):
             self.x, self.y, self.car_image.get_width(), self.car_image.get_height()
         )
         if rect.collidepoint(*target):
+            if self.current_point > 0:
+                x_1, y_1 = self.path[(self.current_point - 1)]
+                x_2, y_2 = self.path[self.current_point]
+                x_delta = x_1 - x_2
+                y_delta = y_1 - y_2
+                distance = sqrt(x_delta ** 2 + y_delta ** 2)
+                self.distance_travelled += distance
             self.current_point += 1
 
     def move(self):
-        if self.current_point >= len(self.path):
-            return
-
-        self.calculate_angle()
-        self.update_path_point()
-        super().move()
+        if self.current_point <= len(self.path):
+            self.calculate_angle()
+            self.update_path_point()
+            super().move()
 
     def next_level(self, level):
         self.reset()

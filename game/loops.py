@@ -16,10 +16,12 @@ WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("pygame-test")
 
+clock = pygame.time.Clock()
+
 MAIN_FONT = pygame.font.SysFont("comicsans", 44)
 SMALL_FONT = pygame.font.SysFont("comicsans", 24)
 
-FPS = 60
+FPS = 30
 
 
 class GameInfo:
@@ -461,6 +463,8 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
             pygame.display.update()
 
+        computer_car.calculate_vel(int(clock.get_fps()), game_info.get_level_time())
+
         player_car.move_player()
         computer_car.move()
 
@@ -892,9 +896,7 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
         pygame.display.update()
 
 
-def main_game_loop():
-
-    clock = pygame.time.Clock()
+def main_game_loop(clock):
 
     player_profile = PlayerProfile("default")
 
