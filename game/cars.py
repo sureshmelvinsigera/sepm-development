@@ -124,7 +124,6 @@ class ComputerCar(Car):
                 (self.track_record - current_time) * fps
             )
             self.vel = min(new_vel, 3.95)
-            print(self.vel)
         else:
             self.vel = 3.95
 
