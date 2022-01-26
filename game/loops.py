@@ -343,14 +343,16 @@ def high_score_name_entry(
         pygame.display.update()
 
 
-def handle_collision(clock, track, player_car, computer_car, game_info, player_profile, time_to_beat):
+def handle_collision(
+    clock, track, player_car, computer_car, game_info, player_profile, time_to_beat
+):
     if player_car.collide(track.border_mask) != None:
         player_car.bounce()
 
-    computer_finish_poi_collide = computer_car.collide(
+    """computer_finish_poi_collide = computer_car.collide(
         track.finish_mask, track.finish_x, track.finish_y
     )
-    """if computer_finish_poi_collide != None:
+    if computer_finish_poi_collide != None:
         blit_text_center(WIN, MAIN_FONT, "You lost!")
         pygame.display.update()
         pygame.time.wait(2000)
@@ -500,7 +502,13 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
         computer_car.move()
 
         handle_collision(
-            clock, track, player_car, computer_car, game_info, player_profile, time_to_beat
+            clock,
+            track,
+            player_car,
+            computer_car,
+            game_info,
+            player_profile,
+            time_to_beat,
         )
 
         pygame.display.update()
