@@ -8,7 +8,6 @@ class BaseModel(Model):
         database = db
 
 
-# Car model fully implemented
 class Car(BaseModel):
     car_id = TextField(primary_key=True)
     car_name = TextField()
@@ -18,7 +17,7 @@ class Car(BaseModel):
     acceleration = IntegerField()
 
     class Meta:
-        table_name = "kh_cars"
+        table_name = "cars"
 
 
 class Path(BaseModel):
@@ -28,10 +27,9 @@ class Path(BaseModel):
     path_y = IntegerField()
 
     class Meta:
-        table_name = "kh_computer_paths"
+        table_name = "computer_paths"
 
 
-# Profile model fully implemented
 class Profile(BaseModel):
     username = TextField(primary_key=True)
     mute = IntegerField()
@@ -39,20 +37,19 @@ class Profile(BaseModel):
     last_track_id = TextField()
 
     class Meta:
-        table_name = "kh_profiles"
+        table_name = "player_profiles"
 
 
 class HighScore(BaseModel):
     id = AutoField()
     name = TextField()
-    time = IntegerField()  # Need to figure out a datatype
+    time = IntegerField()
     track_id = TextField()
 
     class Meta:
-        table_name = "kh_high_scores"
+        table_name = "high_scores"
 
 
-# Track model fully implemented
 class Track(BaseModel):
     track_id = TextField(primary_key=True)
     track_name = TextField()
@@ -67,4 +64,4 @@ class Track(BaseModel):
     finish_y = IntegerField()
 
     class Meta:
-        table_name = "kh_tracks"
+        table_name = "tracks"
