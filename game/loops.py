@@ -343,14 +343,14 @@ def high_score_name_entry(
         pygame.display.update()
 
 
-def handle_collision(clock, track, player_car, computer_car, game_info, player_profile):
+def handle_collision(clock, track, player_car, computer_car, game_info, player_profile, time_to_beat):
     if player_car.collide(track.border_mask) != None:
         player_car.bounce()
 
     computer_finish_poi_collide = computer_car.collide(
         track.finish_mask, track.finish_x, track.finish_y
     )
-    if computer_finish_poi_collide != None:
+    """if computer_finish_poi_collide != None:
         blit_text_center(WIN, MAIN_FONT, "You lost!")
         pygame.display.update()
         pygame.time.wait(2000)
@@ -364,7 +364,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             track.computer_path,
             track.track_record,
         )
-        game_loop(clock, track, player_car, computer_car, game_info, player_profile)
+        game_loop(clock, track, player_car, computer_car, game_info, player_profile)"""
 
     player_finish_poi_collide = player_car.collide(
         track.finish_mask, track.finish_x, track.finish_y
@@ -372,8 +372,8 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
     if player_finish_poi_collide != None:
         if player_finish_poi_collide[1] == 0:
             player_car.bounce()
-        else:
-            blit_text_center(WIN, MAIN_FONT, "You Win!")
+        elif game_info.get_level_time() < time_to_beat:
+            blit_text_center(WIN, MAIN_FONT, "New Track Record!")
             time = game_info.get_level_time()
             pygame.display.update()
             pygame.time.wait(2000)
@@ -390,9 +390,36 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             high_score_name_entry(
                 clock, track, player_car, computer_car, game_info, time, player_profile
             )
+        else:
+            blit_text_center(WIN, MAIN_FONT, "You lost!")
+            pygame.display.update()
+            pygame.time.wait(2000)
+            game_info.reset()
+            player_car.reset()
+            track_id = track.track_id
+            track = Track(track_id)
+            computer_car = ComputerCar(
+                "grey_car",
+                track.computer_start_position,
+                track.computer_path,
+                track.track_record,
+            )
+            game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
 
 def game_loop(clock, track, player_car, computer_car, game_info, player_profile):
+    top_times = cur.execute(
+        """SELECT time
+        FROM high_scores
+        WHERE track_id = ?
+        ORDER BY time
+        LIMIT 10
+        """,
+        (track.track_id,),
+    ).fetchall()
+
+    time_to_beat = top_times[9][0]
+
     while True:
         clock.tick(FPS)
 
@@ -473,7 +500,7 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
         computer_car.move()
 
         handle_collision(
-            clock, track, player_car, computer_car, game_info, player_profile
+            clock, track, player_car, computer_car, game_info, player_profile, time_to_beat
         )
 
         pygame.display.update()

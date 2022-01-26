@@ -80,11 +80,16 @@ def create_high_scores():
     )
 
     high_scores_list = [
-        ("testname", 50, "track_1"),
+        ("testname", 54, "track_1"),
         ("NAME", 55, "track_1"),
-        ("name123", 44, "track_1"),
-        ("Lewis", 48, "track_1"),
-        ("Max", 40, "track_1"),
+        ("name123", 53, "track_1"),
+        ("Lewis", 52, "track_1"),
+        ("Max", 51, "track_1"),
+        ("testname", 50, "track_1"),
+        ("NAME", 49, "track_1"),
+        ("name123", 48, "track_1"),
+        ("Lewis", 47, "track_1"),
+        ("Max", 46, "track_1"),
     ]
 
     cur.executemany("""INSERT INTO high_scores VALUES (?, ?, ?)""", high_scores_list)

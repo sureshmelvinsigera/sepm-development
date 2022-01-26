@@ -126,7 +126,6 @@ class ComputerCar(Car):
             self.vel = min(new_vel, 3.95)
         else:
             self.vel = 3.95
-        print(self.vel)
 
     def draw_points(self, win):
         for point in self.path:
@@ -173,7 +172,7 @@ class ComputerCar(Car):
             self.current_point += 1
 
     def move(self):
-        if self.current_point <= len(self.path):
+        if self.current_point < len(self.path):
             self.calculate_angle()
             self.update_path_point()
             super().move()
