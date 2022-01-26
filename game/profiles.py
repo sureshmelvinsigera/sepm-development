@@ -1,5 +1,5 @@
 import pygame
-from config import con, cur
+
 from database import models
 
 

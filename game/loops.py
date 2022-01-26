@@ -2,9 +2,8 @@ import time
 
 import pygame
 
-from config import con
 from database import models
-from game.cars import PlayerCar, ComputerCar
+from game.cars import ComputerCar, PlayerCar
 from game.profiles import PlayerProfile
 from game.track import Track
 from game.utilities import blit_text_center
@@ -753,7 +752,9 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 if (
                     event.key == pygame.K_RETURN
                     and len(name_entry_box.text) != 0
-                    and not models.Profile.select().where(models.Profile.username == name_entry_box.text).exists()
+                    and not models.Profile.select()
+                    .where(models.Profile.username == name_entry_box.text)
+                    .exists()
                 ):
                     models.Profile.create(
                         username=name_entry_box.text,
@@ -795,7 +796,9 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 # not in cur.execute(
                 #     """SELECT username FROM player_profiles"""
                 # ).fetchall()
-                and not models.Profile.select().where(models.Profile.username == name_entry_box.text).exists()
+                and not models.Profile.select()
+                .where(models.Profile.username == name_entry_box.text)
+                .exists()
             ):
                 models.Profile.create(
                     username=name_entry_box.text,

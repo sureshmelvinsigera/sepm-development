@@ -1,7 +1,7 @@
 import pygame
-from game.utilities import scale_image
-from config import con, cur
+
 from database import models
+from game.utilities import scale_image
 
 
 class Track:
@@ -22,16 +22,11 @@ class Track:
         self.track_record = (
             models.HighScore.select().order_by(models.HighScore.time.desc()).get().time
         )
-
-        self.computer_path = cur.execute(
-            """
-                                        SELECT path_x, path_y
-                                        FROM computer_paths 
-                                        WHERE track_id = ? 
-                                        ORDER BY path_order
-                                        """,
-            (self.track_id,),
-        ).fetchall()
+        self.computer_path = (
+            models.Path.select(models.Path.path_x, models.Path.path_y)
+            .where(models.Path.track_id == self.track_id)
+            .order_by(models.Path.path_order)
+        )
 
         self.track_image = scale_image(pygame.image.load(self.track_path), 0.9)
         self.border_image = scale_image(pygame.image.load(self.border_path), 0.9)
