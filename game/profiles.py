@@ -1,21 +1,15 @@
 import pygame
 from config import con, cur
+from database import models
 
 
 class PlayerProfile:
     def __init__(self, username):
         self.username = username
-        self.mute = cur.execute(
-            """SELECT mute FROM player_profiles WHERE username = ?""", (self.username,)
-        ).fetchone()[0]
-        self.last_car_id = cur.execute(
-            """SELECT last_car_id FROM player_profiles WHERE username = ?""",
-            (self.username,),
-        ).fetchone()[0]
-        self.last_track_id = cur.execute(
-            """SELECT last_track_id FROM player_profiles WHERE username = ?""",
-            (self.username,),
-        ).fetchone()[0]
+        lookup_profile = models.Profile.get(models.Profile.username == username)
+        self.mute = lookup_profile.mute
+        self.last_car_id = lookup_profile.last_car_id
+        self.last_track_id = lookup_profile.last_track_id
 
     def update_mute(self):
         if self.mute:
@@ -26,28 +20,22 @@ class PlayerProfile:
             pygame.mixer.music.pause()
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET mute = ? WHERE username = ?""",
-                (self.mute, self.username),
+            models.Profile.update(mute=self.mute).where(
+                models.Profile.username == self.username
             )
-            con.commit()
 
     def update_last_car_id(self, car_id):
         self.last_car_id = car_id
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET last_car_id = ? WHERE username = ?""",
-                (car_id, self.username),
+            models.Profile.update(last_car_id=car_id).where(
+                models.Profile.username == self.username
             )
-            con.commit()
 
     def update_last_track_id(self, track_id):
         self.last_track_id = track_id
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET last_track_id = ? WHERE username = ?""",
-                (track_id, self.username),
+            models.Profile.update(last_track_id=track_id).where(
+                models.Profile.username == self.username
             )
-            con.commit()

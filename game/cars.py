@@ -1,31 +1,20 @@
+from math import sin, cos, atan, pi, degrees, radians
+
 import pygame
-import time
-from math import sin, cos, tan, atan, pi, degrees, radians, sqrt
-from game.utilities import scale_image, blit_rotate_center, blit_text_center
-from config import con, cur
+
+from database import models
+from game.utilities import scale_image, blit_rotate_center
 
 
 class Car:
     def __init__(self, car_id, start_position):
-        self.car_id = car_id
-        self.car_name = cur.execute(
-            """SELECT car_name FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.car_path = cur.execute(
-            """SELECT car_path FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.max_vel = cur.execute(
-            """SELECT max_vel FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.rotation_vel = cur.execute(
-            """SELECT rotation_vel FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.acceleration = (
-            cur.execute(
-                """SELECT acceleration FROM cars WHERE car_id = ?""", (self.car_id,)
-            ).fetchone()[0]
-            / 10
-        )
+        lookup_car = models.Car.get(models.Car.car_id == car_id)
+        self.car_id = lookup_car.car_id
+        self.car_name = lookup_car.car_name
+        self.car_path = lookup_car.car_path
+        self.max_vel = lookup_car.max_vel
+        self.rotation_vel = lookup_car.rotation_vel
+        self.acceleration = lookup_car.acceleration / 10
 
         self.car_image = scale_image(pygame.image.load(self.car_path), 0.55)
 

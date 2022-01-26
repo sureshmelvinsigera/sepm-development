@@ -1,11 +1,13 @@
-import pygame
 import time
-import math
-from game.utilities import scale_image, blit_rotate_center, blit_text_center
+
+import pygame
+
+from config import con
+from database import models
 from game.cars import PlayerCar, ComputerCar
-from game.track import Track
 from game.profiles import PlayerProfile
-from config import con, cur
+from game.track import Track
+from game.utilities import blit_text_center
 
 pygame.font.init()
 pygame.mixer.init()
@@ -144,7 +146,6 @@ def menu_basic(
     previous_menu,
     click,
 ):
-
     WIN.blit(track.background_image, (0, 0))
     WIN.blit(track.track_image, (0, 0))
     WIN.blit(track.finish_image, track.finish_position)
@@ -283,11 +284,9 @@ def high_score_name_entry(
 
                 if event.key == pygame.K_RETURN:
                     if name_entry_box.text != "":
-                        cur.execute(
-                            """INSERT INTO high_scores VALUES (?, ?, ?)""",
-                            (name_entry_box.text, time, track.track_id),
+                        models.HighScore.create(
+                            name=name_entry_box.text, time=time, track_id=track.track_id
                         )
-                        con.commit()
                         game_loop(
                             clock,
                             track,
@@ -325,11 +324,9 @@ def high_score_name_entry(
         done_button = Button("done", (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if name_entry_box.text != "":
-                cur.execute(
-                    """INSERT INTO high_scores VALUES (?, ?, ?)""",
-                    (name_entry_box.text, time, track.track_id),
+                models.HighScore.create(
+                    name=name_entry_box.text, time=time, track_id=track.track_id
                 )
-                con.commit()
                 game_loop(
                     clock, track, player_car, computer_car, game_info, player_profile
                 )
@@ -342,13 +339,13 @@ def high_score_name_entry(
 
 
 def handle_collision(clock, track, player_car, computer_car, game_info, player_profile):
-    if player_car.collide(track.border_mask) != None:
+    if player_car.collide(track.border_mask) is not None:
         player_car.bounce()
 
     computer_finish_poi_collide = computer_car.collide(
         track.finish_mask, track.finish_x, track.finish_y
     )
-    if computer_finish_poi_collide != None:
+    if computer_finish_poi_collide is not None:
         blit_text_center(WIN, MAIN_FONT, "You lost!")
         pygame.display.update()
         pygame.time.wait(2000)
@@ -365,7 +362,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
     player_finish_poi_collide = player_car.collide(
         track.finish_mask, track.finish_x, track.finish_y
     )
-    if player_finish_poi_collide != None:
+    if player_finish_poi_collide is not None:
         if player_finish_poi_collide[1] == 0:
             player_car.bounce()
         else:
@@ -472,7 +469,6 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
 
 def settings_loop(clock, track, player_car, computer_car, game_info, player_profile):
-
     while True:
         clock.tick(FPS)
 
@@ -511,14 +507,18 @@ def settings_loop(clock, track, player_car, computer_car, game_info, player_prof
 
 
 def car_settings(clock, track, player_car, computer_car, game_info, player_profile):
-    all_cars = cur.execute(
-        """
-        SELECT car_id, car_name, max_vel, rotation_vel, acceleration
-        FROM cars
-        WHERE car_id != 'grey_car'
-        ORDER BY car_name
-        """
-    ).fetchall()
+    all_cars = (
+        models.Car.select(
+            models.Car.car_id,
+            models.Car.car_name,
+            models.Car.max_vel,
+            models.Car.rotation_vel,
+            models.Car.acceleration,
+        )
+        .where(models.Car.car_id != "grey_car")
+        .order_by(models.Car.car_name)
+        .limit(5)
+    )
 
     start_index = 0
 
@@ -547,14 +547,13 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
         car_buttons = []
         car_ids = []
         y = 200
-        for car in all_cars[start_index : min(len(all_cars), start_index + 5)]:
-            car_id, car_name, max_vel, rotation_vel, acceleration = car
-            car_ids.append(car_id)
-            button = Button(car_name, (255, 255, 255), 10, y, 200, 50, (255, 0, 0))
+        for item in all_cars:
+            car_ids.append(item.car_id)
+            button = Button(item.car_name, (255, 255, 255), 10, y, 200, 50, (255, 0, 0))
             car_buttons.append(button)
             stats_y = button.y + button.height / 2 - button.render_text.get_height() / 2
             menu_button_text(
-                f"Speed:{max_vel}    Hand:{rotation_vel}    Acc:{acceleration}",
+                f"Speed:{item.max_vel}    Hand:{item.rotation_vel}    Acc:{item.acceleration}",
                 200,
                 stats_y,
             )
@@ -572,14 +571,11 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
 
 
 def track_settings(clock, track, player_car, computer_car, game_info, player_profile):
-    all_tracks = cur.execute(
-        """
-        SELECT track_id, track_name
-        FROM tracks
-        ORDER BY track_name
-        """
-    ).fetchall()
-
+    all_tracks = (
+        models.Track.select(models.Track.track_id, models.Track.track_name)
+        .order_by(models.Track.track_name)
+        .limit(5)
+    )
     start_index = 0
 
     while True:
@@ -607,12 +603,11 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         track_buttons = []
         track_ids = []
         y = 200
-        for each_track in all_tracks[
-            start_index : min(len(all_tracks), start_index + 5)
-        ]:
-            track_id, track_name = each_track
-            track_ids.append(track_id)
-            button = Button(track_name, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
+        for item in all_tracks:
+            track_ids.append(item.track_id)
+            button = Button(
+                item.track_name, (255, 255, 255), 300, y, 200, 50, (255, 0, 0)
+            )
             track_buttons.append(button)
             y += 100
 
@@ -650,22 +645,18 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
             click,
         )
 
-        top_scores = cur.execute(
-            """
-                                SELECT name, time 
-                                FROM high_scores 
-                                WHERE track_id = ? 
-                                ORDER BY time 
-                                LIMIT 5
-                                """,
-            (track.track_id,),
-        ).fetchall()
+        top_scores = (
+            models.HighScore.select(models.HighScore.name, models.HighScore.time)
+            .where(models.HighScore.track_id == track.track_id)
+            .order_by(models.HighScore.time)
+            .limit(5)
+        )
 
         x, y, score_pos = 150, 200, 1
-        for name, time in top_scores:
+        for item in top_scores:
             menu_button_text(f"{score_pos}.", x - 50, y)
-            menu_button_text(name, x, y)
-            menu_button_text(str(round(time, 3)), x + 300, y)
+            menu_button_text(item.name, x, y)
+            menu_button_text(str(round(item.time, 3)), x + 300, y)
             y += 100
             score_pos += 1
 
@@ -675,13 +666,11 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 def profiles_settings(
     clock, track, player_car, computer_car, game_info, player_profile
 ):
-    all_profiles = cur.execute(
-        """
-        SELECT username
-        FROM player_profiles
-        ORDER BY username
-        """
-    ).fetchall()
+    all_profiles = (
+        models.Profile.select(models.Profile.username)
+        .order_by(models.Profile.username)
+        .limit(5)
+    )
 
     start_index = 0
 
@@ -720,14 +709,11 @@ def profiles_settings(
 
         profile_buttons = []
         y = 200
-        for profile in all_profiles[
-            start_index : min(len(all_profiles), start_index + 5)
-        ]:
-            for username in profile:
-                profile_buttons.append(
-                    Button(username, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
-                )
-                y += 100
+        for profile in all_profiles:
+            profile_buttons.append(
+                Button(profile.username, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
+            )
+            y += 100
 
         for button in profile_buttons:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
@@ -767,21 +753,14 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 if (
                     event.key == pygame.K_RETURN
                     and len(name_entry_box.text) != 0
-                    and name_entry_box.text
-                    not in cur.execute(
-                        """SELECT username FROM player_profiles"""
-                    ).fetchall()
+                    and not models.Profile.select().where(models.Profile.username == name_entry_box.text).exists()
                 ):
-                    cur.execute(
-                        """INSERT INTO player_profiles VALUES (?, ?, ?, ?)""",
-                        (
-                            name_entry_box.text,
-                            player_profile.mute,
-                            player_car.car_id,
-                            track.track_id,
-                        ),
+                    models.Profile.create(
+                        username=name_entry_box.text,
+                        mute=player_profile.mute,
+                        last_car_id=player_car.car_id,
+                        last_track_id=track.track_id,
                     )
-                    con.commit()
                     player_profile = PlayerProfile(name_entry_box.text)
                     profiles_settings(
                         clock,
@@ -812,19 +791,17 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if (
                 name_entry_box.text != ""
-                and name_entry_box.text
-                not in cur.execute(
-                    """SELECT username FROM player_profiles"""
-                ).fetchall()
+                # and name_entry_box.text
+                # not in cur.execute(
+                #     """SELECT username FROM player_profiles"""
+                # ).fetchall()
+                and not models.Profile.select().where(models.Profile.username == name_entry_box.text).exists()
             ):
-                cur.execute(
-                    """INSERT INTO player_profiles VALUES (?, ?, ?, ?)""",
-                    (
-                        name_entry_box.text,
-                        player_profile.mute,
-                        player_car.car_id,
-                        track.track_id,
-                    ),
+                models.Profile.create(
+                    username=name_entry_box.text,
+                    mute=player_profile.mute,
+                    last_car_id=player_car.car_id,
+                    last_track_id=track.track_id,
                 )
                 con.commit()
                 player_profile = PlayerProfile(name_entry_box.text)
@@ -893,7 +870,6 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
 
 
 def main_game_loop():
-
     clock = pygame.time.Clock()
 
     player_profile = PlayerProfile("default")

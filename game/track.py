@@ -1,47 +1,28 @@
 import pygame
 from game.utilities import scale_image
 from config import con, cur
+from database import models
 
 
 class Track:
     def __init__(self, track_id):
         self.track_id = track_id
-        self.track_name = cur.execute(
-            """SELECT track_name FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.track_path = cur.execute(
-            """SELECT track_path FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.border_path = cur.execute(
-            """SELECT border_path FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.background_path = cur.execute(
-            """SELECT background_path FROM tracks WHERE track_id = ?""",
-            (self.track_id,),
-        ).fetchone()[0]
-        self.player_x = cur.execute(
-            """SELECT player_x FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.player_y = cur.execute(
-            """SELECT player_y FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.computer_x = cur.execute(
-            """SELECT computer_x FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.computer_y = cur.execute(
-            """SELECT computer_y FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.finish_x = cur.execute(
-            """SELECT finish_x FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
-        self.finish_y = cur.execute(
-            """SELECT finish_y FROM tracks WHERE track_id = ?""", (self.track_id,)
-        ).fetchone()[0]
+        lookup_track = models.Track.get(models.Track.track_id == track_id)
+        self.track_name = lookup_track.track_name
+        self.track_path = lookup_track.track_path
+        self.border_path = lookup_track.border_path
+        self.background_path = lookup_track.background_path
+        self.player_x = lookup_track.player_x
+        self.player_y = lookup_track.player_y
+        self.computer_x = lookup_track.computer_x
+        self.computer_y = lookup_track.computer_y
+        self.finish_x = lookup_track.finish_x
+        self.finish_y = lookup_track.finish_y
 
-        self.track_record = cur.execute(
-            """SELECT time FROM high_scores WHERE track_id = ? ORDER BY time""",
-            (self.track_id,),
-        ).fetchone()[0]
+        self.track_record = (
+            models.HighScore.select().order_by(models.HighScore.time.desc()).get().time
+        )
+
         self.computer_path = cur.execute(
             """
                                         SELECT path_x, path_y

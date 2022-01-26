@@ -1,0 +1,283 @@
+- model: Car
+  car_id: red_car
+  car_name: RED
+  car_path: assets/img/red-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: green_car
+  car_name: GREEN
+  car_path: assets/img/green-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: grey_car
+  car_name: GREY
+  car_path: assets/img/grey-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: purple_car
+  car_name: PURPLE
+  car_path: assets/img/purple-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: white_car
+  car_name: WHITE
+  car_path: assets/img/white-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Track
+  track_id: track_1
+  track_name: Track 1
+  track_path: assets/img/track.png
+  border_path: assets/img/track-border.png
+  background_path: assets/img/grass.jpg
+  player_x: 180
+  player_y: 200
+  computer_x: 150
+  computer_y: 200
+  finish_x: 130
+  finish_y: 250
+
+- model: Path
+  track_id: track_1
+  path_x: 175
+  path_y: 119
+
+- model: Path
+  track_id: track_1
+  path_x: 110
+  path_y: 70
+
+- model: Path
+  track_id: track_1
+  path_x: 56
+  path_y: 133
+
+- model: Path
+  track_id: track_1
+  path_x: 70
+  path_y: 481
+
+- model: Path
+  track_id: track_1
+  path_x: 318
+  path_y: 731
+
+- model: Path
+  track_id: track_1
+  path_x: 404
+  path_y: 680
+
+- model: Path
+  track_id: track_1
+  path_x: 418
+  path_y: 521
+
+- model: Path
+  track_id: track_1
+  path_x: 507
+  path_y: 475
+
+- model: Path
+  track_id: track_1
+  path_x: 600
+  path_y: 551
+
+- model: Path
+  track_id: track_1
+  path_x: 613
+  path_y: 715
+
+- model: Path
+  track_id: track_1
+  path_x: 736
+  path_y: 713
+
+- model: Path
+  track_id: track_1
+  path_x: 734
+  path_y: 399
+
+- model: Path
+  track_id: track_1
+  path_x: 611
+  path_y: 357
+
+- model: Path
+  track_id: track_1
+  path_x: 409
+  path_y: 343
+
+- model: Path
+  track_id: track_1
+  path_x: 433
+  path_y: 257
+
+- model: Path
+  track_id: track_1
+  path_x: 697
+  path_y: 258
+
+- model: Path
+  track_id: track_1
+  path_x: 738
+  path_y: 123
+
+- model: Path
+  track_id: track_1
+  path_x: 581
+  path_y: 71
+
+- model: Path
+  track_id: track_1
+  path_x: 303
+  path_y: 78
+
+- model: Path
+  track_id: track_1
+  path_x: 275
+  path_y: 377
+
+- model: Path
+  track_id: track_1
+  path_x: 176
+  path_y: 388
+
+- model: Path
+  track_id: track_1
+  path_x: 178
+  path_y: 26
+
+- model: Profile
+  username: default
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: username
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: user123
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_1
+
+- model: Profile
+  username: test name
+  mute: 0
+  last_car_id: purple_car
+  last_track_id: track_1
+
+- model: Profile
+  username: default23
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: abc123
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: xyz987
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_1
+
+- model: Profile
+  username: testing
+  mute: 0
+  last_car_id: purple_car
+  last_track_id: track_1
+
+- model: Profile
+  username: max
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: lewis
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: mike
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_1
+
+- model: Profile
+  username: alex
+  mute: 0
+  last_car_id: purple_car
+  last_track_id: track_1
+
+- model: Profile
+  username: kieron
+  mute: 0,
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: kike
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: suresh
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_1
+
+- model: Profile
+  username: antonios
+  mute: 0
+  last_car_id: purple_car
+  last_track_id: track_1
+
+- model: HighScore
+  name: testname
+  time: 50
+  track_id: track_1
+
+- model: HighScore
+  name: NAME
+  time: 55
+  track_id: track_1
+
+- model: HighScore
+  name: name123
+  time: 44
+  track_id: track_1
+
+- model: HighScore
+  name: Lewis
+  time: 48
+  track_id: track_1
+
+- model: HighScore
+  name: Max
+  time: 43
+  track_id: track_1
