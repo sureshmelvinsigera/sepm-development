@@ -28,8 +28,8 @@ class Track:
             .order_by(models.Path.path_order)
         )
 
-        self.track_image = scale_image(pygame.image.load(self.track_path), 0.9)
-        self.border_image = scale_image(pygame.image.load(self.border_path), 0.9)
+        self.track_image = pygame.image.load(self.track_path)
+        self.border_image = pygame.image.load(self.border_path)
         self.border_mask = pygame.mask.from_surface(self.border_image)
         self.background_image = scale_image(
             pygame.image.load(self.background_path), 2.5

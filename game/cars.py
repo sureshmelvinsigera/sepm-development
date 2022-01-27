@@ -16,7 +16,7 @@ class Car:
         self.rotation_vel = lookup_car.rotation_vel
         self.acceleration = lookup_car.acceleration / 10
 
-        self.car_image = scale_image(pygame.image.load(self.car_path), 0.55)
+        self.car_image = pygame.image.load(self.car_path)
 
         self.vel = 0
         self.angle = 0

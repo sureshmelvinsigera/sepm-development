@@ -20,6 +20,7 @@ pygame.display.set_caption("pygame-test")
 MAIN_FONT = pygame.font.SysFont("comicsans", 44)
 SMALL_FONT = pygame.font.SysFont("comicsans", 24)
 
+
 FPS = 60
 
 
@@ -183,7 +184,7 @@ def menu_basic(
             game_info.reset()
             player_car.reset()
             computer_car = ComputerCar(
-                "grey_car",
+                "black_car",
                 track.computer_start_position,
                 track.computer_path,
                 track.track_record,
@@ -351,7 +352,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
         game_info.reset()
         player_car.reset()
         computer_car = ComputerCar(
-            "grey_car",
+            "black_car",
             track.computer_start_position,
             track.computer_path,
             track.track_record,
@@ -372,7 +373,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             game_info.reset()
             player_car.reset()
             computer_car = ComputerCar(
-                "grey_car",
+                "black_car",
                 track.computer_start_position,
                 track.computer_path,
                 track.track_record,
@@ -404,6 +405,16 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
             "main menu",
             click,
         )
+
+        # for drawing new track path
+        new_path = []
+        if click:
+            new_path_point = pygame.mouse.get_pos()
+            new_path.append(new_path_point)
+            print(new_path)
+
+        for point in new_path:
+            pygame.draw.circle(WIN, (255, 0, 0), point, 5)
 
         while not game_info.started:
             click = False
@@ -444,7 +455,7 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
                 game_info.reset()
                 player_car.reset()
                 computer_car = ComputerCar(
-                    "grey_car",
+                    "black_car",
                     track.computer_start_position,
                     track.computer_path,
                     track.track_record,
@@ -514,7 +525,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             models.Car.rotation_vel,
             models.Car.acceleration,
         )
-        .where(models.Car.car_id != "grey_car")
+        .where(models.Car.car_id != "black_car")
         .order_by(models.Car.car_name)
         .limit(5)
     )
@@ -722,7 +733,7 @@ def profiles_settings(
                     player_profile.last_car_id, track.player_start_position
                 )
                 computer_car = ComputerCar(
-                    "grey_car",
+                    "black_car",
                     track.computer_start_position,
                     track.computer_path,
                     track.track_record,
@@ -882,7 +893,7 @@ def main_game_loop():
     player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
 
     computer_car = ComputerCar(
-        "grey_car",
+        "black_car",
         track.computer_start_position,
         track.computer_path,
         track.track_record,
