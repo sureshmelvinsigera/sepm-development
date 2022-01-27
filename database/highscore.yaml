@@ -1,0 +1,24 @@
+- model: HighScore
+  name: testname
+  time: 50
+  track_id: track_1
+
+- model: HighScore
+  name: NAME
+  time: 55
+  track_id: track_1
+
+- model: HighScore
+  name: name123
+  time: 44
+  track_id: track_1
+
+- model: HighScore
+  name: Lewis
+  time: 48
+  track_id: track_1
+
+- model: HighScore
+  name: Max
+  time: 43
+  track_id: track_1

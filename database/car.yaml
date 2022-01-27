@@ -1,0 +1,39 @@
+- model: Car
+  car_id: red_car
+  car_name: RED
+  car_path: assets/img/red-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: green_car
+  car_name: GREEN
+  car_path: assets/img/green-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: grey_car
+  car_name: GREY
+  car_path: assets/img/grey-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: purple_car
+  car_name: PURPLE
+  car_path: assets/img/purple-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1
+
+- model: Car
+  car_id: white_car
+  car_name: WHITE
+  car_path: assets/img/white-car.png
+  max_vel: 4
+  rotation_vel: 4
+  acceleration: 1

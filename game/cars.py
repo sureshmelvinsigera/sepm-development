@@ -1,31 +1,20 @@
+from math import atan, cos, degrees, pi, radians, sin
+
 import pygame
-import time
-from math import sin, cos, tan, atan, pi, degrees, radians, sqrt
-from game.utilities import scale_image, blit_rotate_center, blit_text_center
-from config import con, cur
+
+from database import models
+from game.utilities import blit_rotate_center, scale_image
 
 
 class Car:
     def __init__(self, car_id, start_position):
-        self.car_id = car_id
-        self.car_name = cur.execute(
-            """SELECT car_name FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.car_path = cur.execute(
-            """SELECT car_path FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.max_vel = cur.execute(
-            """SELECT max_vel FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.rotation_vel = cur.execute(
-            """SELECT rotation_vel FROM cars WHERE car_id = ?""", (self.car_id,)
-        ).fetchone()[0]
-        self.acceleration = (
-            cur.execute(
-                """SELECT acceleration FROM cars WHERE car_id = ?""", (self.car_id,)
-            ).fetchone()[0]
-            / 10
-        )
+        lookup_car = models.Car.get(models.Car.car_id == car_id)
+        self.car_id = lookup_car.car_id
+        self.car_name = lookup_car.car_name
+        self.car_path = lookup_car.car_path
+        self.max_vel = lookup_car.max_vel
+        self.rotation_vel = lookup_car.rotation_vel
+        self.acceleration = lookup_car.acceleration / 10
 
         self.car_image = scale_image(pygame.image.load(self.car_path), 0.55)
 
@@ -88,6 +77,7 @@ class PlayerCar(Car):
             self.move()
 
 
+# Path_new is to be swapped with path when complete
 class ComputerCar(Car):
     def __init__(self, car_id, start_position, path, track_record):
         super().__init__(car_id, start_position)
@@ -119,13 +109,14 @@ class ComputerCar(Car):
 
     def draw_points(self, win):
         for point in self.path:
-            pygame.draw.circle(win, (255, 0, 0), point, 5)
+            pygame.draw.circle(win, (255, 0, 0), (point.path_x, point.path_y), 5)
 
     def draw(self, win):
         super().draw(win)
 
     def calculate_angle(self):
-        target_x, target_y = self.path[self.current_point]
+        target_x = list(self.path)[self.current_point].path_x
+        target_y = list(self.path)[self.current_point].path_y
         x_diff = target_x - self.x
         y_diff = target_y - self.y
 
@@ -147,11 +138,11 @@ class ComputerCar(Car):
             self.angle += min(self.rotation_vel, abs(difference_in_angle))
 
     def update_path_point(self):
-        target = self.path[self.current_point]
+        target = list(self.path)[self.current_point]
         rect = pygame.Rect(
             self.x, self.y, self.car_image.get_width(), self.car_image.get_height()
         )
-        if rect.collidepoint(*target):
+        if rect.collidepoint(target.path_x, target.path_y):
             self.current_point += 1
 
     def move(self):
