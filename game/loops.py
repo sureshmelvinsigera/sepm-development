@@ -410,8 +410,9 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
         if click:
             new_path_point = pygame.mouse.get_pos()
             path_x, path_y = new_path_point
-            print(f'-model: path\n track_id: {track.track_id}\n path_x: {path_x}\n path_y: {path_y}\n')
-
+            print(
+                f"-model: path\n track_id: {track.track_id}\n path_x: {path_x}\n path_y: {path_y}\n"
+            )
 
         while not game_info.started:
             click = False
@@ -622,12 +623,14 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 id = track_ids[track_buttons.index(button)]
                 track = Track(id)
-                player_car = PlayerCar(player_profile.last_car_id, track.player_start_position)
+                player_car = PlayerCar(
+                    player_profile.last_car_id, track.player_start_position
+                )
                 computer_car = ComputerCar(
-                    'black_car',
+                    "black_car",
                     track.computer_start_position,
                     track.computer_path,
-                    track.track_record
+                    track.track_record,
                 )
                 player_profile.update_last_track_id(track.track_id)
 
