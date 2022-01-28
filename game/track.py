@@ -33,7 +33,7 @@ class Track:
         self.border_mask = pygame.mask.from_surface(self.border_image)
         self.background_image = pygame.image.load(self.background_path)
 
-        self.finish_image = pygame.image.load("assets/img/finish.png")
+        self.finish_image = pygame.image.load("assets/images//tracks/finish.png")
         self.finish_mask = pygame.mask.from_surface(self.finish_image)
         self.finish_position = (self.finish_x, self.finish_y)
 

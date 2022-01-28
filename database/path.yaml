@@ -152,3 +152,73 @@
   track_id: track_1
   path_x: 159
   path_y: 256
+
+- model: Path
+  track_id: track_2
+  path_x: 125
+  path_y: 207
+
+- model: Path
+  track_id: track_2
+  path_x: 150
+  path_y: 170
+
+- model: Path
+  track_id: track_2
+  path_x: 190
+  path_y: 130
+
+- model: Path
+  track_id: track_2
+  path_x: 240
+  path_y: 130
+
+- model: Path
+  track_id: track_2
+  path_x: 584
+  path_y: 130
+
+- model: Path
+  track_id: track_2
+  path_x: 639
+  path_y: 174
+
+- model: Path
+  track_id: track_2
+  path_x: 654
+  path_y: 236
+
+- model: Path
+  track_id: track_2
+  path_x: 654
+  path_y: 567
+
+- model: Path
+  track_id: track_2
+  path_x: 638
+  path_y: 631
+
+- model: Path
+  track_id: track_2
+  path_x: 560
+  path_y: 654
+
+- model: Path
+  track_id: track_2
+  path_x: 233
+  path_y: 651
+
+- model: Path
+  track_id: track_2
+  path_x: 156
+  path_y: 634
+
+- model: Path
+  track_id: track_2
+  path_x: 141
+  path_y: 557
+
+- model: Path
+  track_id: track_2
+  path_x: 122
+  path_y: 406

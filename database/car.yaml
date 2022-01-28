@@ -1,7 +1,7 @@
 - model: Car
   car_id: red_car
   car_name: RED
-  car_path: assets/img/red-car.png
+  car_path: assets/images/cars/red-car.png
   max_vel: 4
   rotation_vel: 4
   acceleration: 1
@@ -9,15 +9,15 @@
 - model: Car
   car_id: green_car
   car_name: GREEN
-  car_path: assets/img/green-car.png
+  car_path: assets/images/cars/green-car.png
   max_vel: 4
   rotation_vel: 4
   acceleration: 1
 
 - model: Car
   car_id: black_car
-  car_name: GREY
-  car_path: assets/img/black-car.png
+  car_name: BLACK
+  car_path: assets/images/cars/black-car.png
   max_vel: 4
   rotation_vel: 4
   acceleration: 1
@@ -25,7 +25,7 @@
 - model: Car
   car_id: blue_car
   car_name: BLUE
-  car_path: assets/img/blue-car.png
+  car_path: assets/images/cars/blue-car.png
   max_vel: 4
   rotation_vel: 4
   acceleration: 1
@@ -33,7 +33,7 @@
 - model: Car
   car_id: yellow_car
   car_name: YELLOW
-  car_path: assets/img/yellow-car.png
+  car_path: assets/images/cars/yellow-car.png
   max_vel: 4
   rotation_vel: 4
   acceleration: 1

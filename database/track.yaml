@@ -1,12 +1,25 @@
 - model: Track
   track_id: track_1
   track_name: Track 1
-  track_path: assets/img/track-1.png
-  border_path: assets/img/track-1-border.png
-  background_path: assets/img/grass.png
+  track_path: assets/images/tracks/track-1/track-1.png
+  border_path: assets/images/tracks/track-1/track-1-border.png
+  background_path: assets/images/backgrounds/grass.png
   player_x: 170
   player_y: 200
   computer_x: 140
   computer_y: 200
   finish_x: 130
   finish_y: 250
+
+- model: Track
+  track_id: track_2
+  track_name: Track 2
+  track_path: assets/images/tracks/track-2/track-2.png
+  border_path: assets/images/tracks/track-2/track-2-border.png
+  background_path: assets/images/backgrounds/stone.png
+  player_x: 150
+  player_y: 350
+  computer_x: 120
+  computer_y: 350
+  finish_x: 110
+  finish_y: 400
