@@ -153,72 +153,47 @@
   path_x: 159
   path_y: 256
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 125
-  path_y: 207
+  path_x: 129
+  path_y: 211
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 150
-  path_y: 170
+  path_x: 219
+  path_y: 142
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 190
-  path_y: 130
+  path_x: 587
+  path_y: 149
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 240
-  path_y: 130
+  path_x: 660
+  path_y: 222
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 584
-  path_y: 130
+  path_x: 655
+  path_y: 560
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 639
-  path_y: 174
+  path_x: 567
+  path_y: 658
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 654
-  path_y: 236
+  path_x: 228
+  path_y: 649
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 654
-  path_y: 567
+  path_x: 139
+  path_y: 572
 
-- model: Path
+- model: path
   track_id: track_2
-  path_x: 638
-  path_y: 631
-
-- model: Path
-  track_id: track_2
-  path_x: 560
-  path_y: 654
-
-- model: Path
-  track_id: track_2
-  path_x: 233
-  path_y: 651
-
-- model: Path
-  track_id: track_2
-  path_x: 156
-  path_y: 634
-
-- model: Path
-  track_id: track_2
-  path_x: 141
-  path_y: 557
-
-- model: Path
-  track_id: track_2
-  path_x: 122
-  path_y: 406
+  path_x: 121
+  path_y: 408
