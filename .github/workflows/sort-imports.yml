@@ -30,7 +30,8 @@ jobs:
       - name: Sort Imports
         uses: isort/isort-action@master
         with:
-          requirementsFiles: "requirements.txt requirements-tests.txt"
+          isortVersion: 5.10.1
+          requirementsFiles: "requirements.txt"
           configuration: ""
 
       - name: Push Restyled Changes
