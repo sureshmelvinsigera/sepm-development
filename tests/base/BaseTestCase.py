@@ -9,7 +9,7 @@ MODELS = [Car, HighScore, Path, Profile, Track]
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        test_db = SqliteDatabase(':memory:')
+        test_db = SqliteDatabase(":memory:")
         # Bind model classes to test db. Since we have a complete list of
         # all models, we do not need to recursively bind dependencies.
         test_db.bind(MODELS, bind_refs=True, bind_backrefs=True)
@@ -34,4 +34,3 @@ class BaseTestCase(unittest.TestCase):
                     elif item.get("model").upper() == "PROFILE":
                         item.pop("model")
                         Profile.create(**item)
-

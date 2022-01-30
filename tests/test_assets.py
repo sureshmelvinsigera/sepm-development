@@ -4,7 +4,6 @@ from database.models import Car, Track
 
 
 class TestAssets(BaseTestCase):
-
     def test_if_backgrounds_exist(self):
         """Test if backgrounds exist from array"""
         backgrounds = ["dirt.png", "grass.png", "stone.png"]
@@ -30,9 +29,15 @@ class TestAssets(BaseTestCase):
         self.assertTrue(exists(f"assets/images/tracks/{finish_line}"))
         for track in range(1, no_of_tracks + 1):
             self.assertTrue(
-                exists(f"assets/images/tracks/track-{str(track)}/{track_file.replace('{trackno}', str(track))}"))
+                exists(
+                    f"assets/images/tracks/track-{str(track)}/{track_file.replace('{trackno}', str(track))}"
+                )
+            )
             self.assertTrue(
-                exists(f"assets/images/tracks/track-{str(track)}/{track_border_file.replace('{trackno}', str(track))}"))
+                exists(
+                    f"assets/images/tracks/track-{str(track)}/{track_border_file.replace('{trackno}', str(track))}"
+                )
+            )
 
     def test_if_database_track_files_exist(self):
         """Test if tracks in the database have associated files"""
