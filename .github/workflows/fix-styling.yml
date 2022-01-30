@@ -1,4 +1,4 @@
-name: "Sort Imports"
+name: "Fix Repository Styling"
 
 on:
   push:
@@ -15,6 +15,23 @@ on:
       - feature/update-workflows
 
 jobs:
+  lint-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Lint Python Code
+        uses: psf/black@stable
+        with:
+            options: "--verbose"
+            src: "./"
+
+      - name: Push Restyled Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fix styling
+
   sort-imports:
     runs-on: ubuntu-latest
     steps:
