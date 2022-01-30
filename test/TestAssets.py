@@ -1,7 +1,7 @@
 import os
+import pathlib as pl
 import sys
 import unittest
-import pathlib as pl
 
 TMP_DEL = "×"
 PTH_DEL = "/"

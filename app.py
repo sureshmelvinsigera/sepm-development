@@ -4,12 +4,12 @@ import pygame
 import yaml
 from peewee import *
 
-from database.models import Car, HighScore, Path, Profile, Track
+from database.models import Car, HighScore, Path, Profanity, Profile, Track
 from game.loops import main_game_loop
 
 database = SqliteDatabase(":memory:")
 database.connect()
-database.create_tables([Car, Path, Profile, Track, HighScore])
+database.create_tables([Car, Path, Profile, Track, HighScore, Profanity])
 
 # Used Generator Function (PEP 289) to iterate through *.yaml files in /database
 for import_file in (x for x in os.listdir("database") if x.endswith(".yaml")):
@@ -29,6 +29,10 @@ for import_file in (x for x in os.listdir("database") if x.endswith(".yaml")):
         elif item.get("model").upper() == "PROFILE":
             item.pop("model")
             Profile.create(**item)
+        elif item.get("model").upper() == "PROFANITY":
+            item.pop("model")
+            Profanity.create(**item)
+
 
 main_game_loop()
 
