@@ -1,7 +1,9 @@
-import unittest
-import yaml
 import os
+import unittest
+
+import yaml
 from peewee import *
+
 from database.models import Car, HighScore, Path, Profile, Track
 
 MODELS = [Car, HighScore, Path, Profile, Track]

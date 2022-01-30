@@ -1,5 +1,7 @@
 from math import atan, cos, degrees, pi, radians, sin
+
 import pygame
+
 from database import models
 from game.utilities import blit_rotate_center, scale_image
 
