@@ -1,8 +1,6 @@
 import os
-
 import pygame
 import yaml
-
 from database.models import Car, HighScore, Path, Profile, Track
 from game.loops import main_game_loop
 from peewee import *
