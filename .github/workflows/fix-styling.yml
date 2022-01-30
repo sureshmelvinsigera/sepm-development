@@ -21,6 +21,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Pull Changes
+        run: git pull
+
       - name: Lint Python Code
         uses: psf/black@stable
         with:
@@ -37,6 +40,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Pull Changes
+        run: git pull
 
       - name: Setup Python
         uses: actions/setup-python@v2
