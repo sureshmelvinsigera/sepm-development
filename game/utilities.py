@@ -21,3 +21,10 @@ def blit_text_center(win, font, text):
             win.get_height() / 2 - render.get_height() / 2,
         ),
     )
+
+
+def censor_word(word):
+    if word:
+        censored_word = str(word[0] + ("*" * len(word[1:-1])) + word[-1])
+        return censored_word
+    return ""

@@ -6,7 +6,7 @@ from database import models
 from game.cars import ComputerCar, PlayerCar
 from game.profiles import PlayerProfile
 from game.track import Track
-from game.utilities import blit_text_center
+from game.utilities import blit_text_center, censor_word
 
 pygame.font.init()
 pygame.mixer.init()
@@ -675,7 +675,14 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
         x, y, score_pos = 150, 200, 1
         for item in top_scores:
             menu_button_text(f"{score_pos}.", x - 50, y)
-            menu_button_text(item.name, x, y)
+            if (
+                models.Profanity.select()
+                .where(models.Profanity.word == item.name.lower())
+                .exists()
+            ):
+                menu_button_text(censor_word(item.name), x, y)
+            else:
+                menu_button_text(item.name, x, y)
             menu_button_text(str(round(item.time, 3)), x + 300, y)
             y += 100
             score_pos += 1
