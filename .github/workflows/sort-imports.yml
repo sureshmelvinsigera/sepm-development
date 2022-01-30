@@ -1,0 +1,36 @@
+name: "Sort Imports"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  sort-imports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          architecture: x64
+
+      - name: Sort Imports
+        uses: isort/isort-action@master
+        with:
+          requirementsFiles: "requirements.txt requirements-tests.txt"
+          configuration: ""
+
+      - name: Push Restyled Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Sorted Imports
