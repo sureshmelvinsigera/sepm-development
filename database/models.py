@@ -65,3 +65,11 @@ class Track(BaseModel):
 
     class Meta:
         table_name = "tracks"
+
+
+class Profanity(BaseModel):
+    id = AutoField()
+    word = TextField()
+
+    class Meta:
+        table_name = "profanity_words"
