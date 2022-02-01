@@ -39,3 +39,14 @@ class Track:
 
         self.player_start_position = (self.player_x, self.player_y)
         self.computer_start_position = (self.computer_x, self.computer_y)
+
+    def draw_track(self, win):
+        """Draws the track in the game window.
+
+        Args:
+            win -- window, or surface, the track will be drawn on.
+        """
+        win.blit(self.background_image, (0, 0))
+        win.blit(self.track_image, (0, 0))
+        win.blit(self.finish_image, self.finish_position)
+        win.blit(self.border_image, (0, 0))

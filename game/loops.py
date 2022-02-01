@@ -6,7 +6,7 @@ from database import models
 from game.cars import ComputerCar, PlayerCar
 from game.profiles import PlayerProfile
 from game.track import Track
-from game.utilities import blit_text_center, censor_word
+from game.utilities import blit_text_center, censor_word, draw_computer_path
 
 pygame.font.init()
 pygame.mixer.init()
@@ -15,7 +15,7 @@ pygame.mixer.music.play(-1)
 
 WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("pygame-test")
+pygame.display.set_caption("SEPM Racing Game")
 
 MAIN_FONT = pygame.font.SysFont("comicsans", 44)
 SMALL_FONT = pygame.font.SysFont("comicsans", 24)
@@ -25,26 +25,25 @@ FPS = 60
 
 
 class GameInfo:
-    LEVELS = 10
-
-    def __init__(self, level=1):
-        self.level = level
+    def __init__(self):
         self.started = False
-        self.level_start_time = 0
+        self.race_start_time = 0
 
     def reset(self):
-        self.level = 1
+        """Resets start time and started to false."""
         self.started = False
-        self.level_start_time = 0
+        self.race_start_time = 0
 
-    def start_level(self):
+    def start_race(self):
+        """Sets start to true and gets start time."""
         self.started = True
-        self.level_start_time = time.time()
+        self.race_start_time = time.time()
 
-    def get_level_time(self):
+    def get_race_time(self):
+        """Returns race time if race is started."""
         if not self.started:
             return 0
-        return round(time.time() - self.level_start_time, 2)
+        return round(time.time() - self.race_start_time, 2)
 
 
 class Button:
@@ -69,6 +68,7 @@ class Button:
         self.draw_button()
 
     def button_text(self):
+        """Draws button text onto the button rectangle."""
         WIN.blit(
             self.render_text,
             (
@@ -78,6 +78,7 @@ class Button:
         )
 
     def draw_button(self):
+        """Draws the button and button text."""
         pygame.draw.rect(WIN, self.button_colour, self.button_rect)
         self.button_text()
 
@@ -97,6 +98,7 @@ class TextBox:
         self.textbox_rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def input_text(self):
+        """Draws the text the text box"""
         WIN.blit(
             self.render_text,
             (
@@ -106,10 +108,16 @@ class TextBox:
         )
 
     def draw_textbox(self):
+        """Draws the text bow"""
         pygame.draw.rect(WIN, self.background_colour, self.textbox_rect)
         self.input_text()
 
     def update_text(self, event):
+        """Updates the text in the text box if the string is less than 8 characters.
+
+        Args:
+            event -- a pygame event.
+        """
         if event.key == pygame.K_BACKSPACE:
             self.text = self.text[:-1]
 
@@ -121,16 +129,29 @@ class TextBox:
 
 
 def quit_game():
+    """Quits pygame and exits."""
     pygame.quit()
     exit()
 
 
-def menu_button_text(button_text, x, y):
+def menu_text(button_text, x, y):
+    """Draws text at the appropriate co-ordinates
+
+    Args:
+        button_text -- text to be drawn on screen.
+        x -- x co-ordinate of top left corner of text.
+        y -- y co-ordinate of top left corner of text.
+    """
     text = MAIN_FONT.render(button_text.upper(), 1, (255, 255, 255))
     WIN.blit(text, (x, y))
 
 
 def menu_title(menu_name):
+    """Draws menu title text at the top centre of the window.
+
+    Args:
+        menu_name -- menu title text to be drawn.
+    """
     text = MAIN_FONT.render(menu_name.upper(), 1, (255, 255, 255))
     WIN.blit(text, (WIN.get_width() / 2 - text.get_width() / 2, 10))
 
@@ -146,11 +167,20 @@ def menu_basic(
     previous_menu,
     click,
 ):
-    WIN.blit(track.background_image, (0, 0))
-    WIN.blit(track.track_image, (0, 0))
-    WIN.blit(track.finish_image, track.finish_position)
-    WIN.blit(track.border_image, (0, 0))
+    """Draws the basic menu screen, or game window, and navigation buttons as appropriate.
 
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+        menu_name -- current menu title.
+        previous_menu -- previous menu name.
+        click -- boolean based on if the player has clicked their mouse.
+    """
+    track.draw_track(WIN)
     computer_car.draw(WIN)
     player_car.draw(WIN)
 
@@ -217,7 +247,7 @@ def menu_basic(
 
     if menu_name == "game":
         time_text = MAIN_FONT.render(
-            f"Time: {game_info.get_level_time()}s", 1, (255, 255, 255)
+            f"Time: {game_info.get_race_time()}s", 1, (255, 255, 255)
         )
         WIN.blit(time_text, (10, HEIGHT - time_text.get_height() - 40))
 
@@ -228,6 +258,13 @@ def menu_basic(
 
 
 def menu_bottom_nav_buttons(start_index, all_list, click):
+    """Displays the forward/back navigation buttons on menus when appropriate.
+
+    Args:
+        start_index -- index the data will begin being displayed from.
+        all_list -- list of all data being displayed.
+        click -- boolean based on if the player has clicked their mouse.
+    """
     width, height = 150, 30
     if start_index + 5 < len(all_list):
         next_button = Button(
@@ -263,6 +300,17 @@ def menu_bottom_nav_buttons(start_index, all_list, click):
 def high_score_name_entry(
     clock, track, player_car, computer_car, game_info, time, player_profile
 ):
+    """Displays the name entry screen for the player to save their race time.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        time -- race finish time.
+        player_profile -- current PlayerProfile object.
+    """
     if player_profile.username == "default":
         name_entry_box = TextBox()
     else:
@@ -317,7 +365,7 @@ def high_score_name_entry(
             click,
         )
 
-        menu_button_text(f"Time: {time}", 300, 200)
+        menu_text(f"Time: {time}", 300, 200)
 
         name_entry_box.draw_textbox()
 
@@ -339,6 +387,17 @@ def high_score_name_entry(
 
 
 def handle_collision(clock, track, player_car, computer_car, game_info, player_profile):
+    """Handles collisions between the player car, track, and finish line. Also handles collisions
+    between the computer car and finish line.
+
+        Args:
+            clock -- pygame clock.
+            track -- current Track object.
+            player_car -- current PlayerCar object.
+            computer_car -- current ComputerCar object.
+            game_info -- GameInfo object.
+            player_profile -- current PlayerProfile object.
+    """
     if player_car.collide(track.border_mask) is not None:
         player_car.bounce()
 
@@ -367,7 +426,7 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
             player_car.bounce()
         else:
             blit_text_center(WIN, MAIN_FONT, "You Win!")
-            time = game_info.get_level_time()
+            time = game_info.get_race_time()
             pygame.display.update()
             pygame.time.wait(2000)
             game_info.reset()
@@ -384,6 +443,16 @@ def handle_collision(clock, track, player_car, computer_car, game_info, player_p
 
 
 def game_loop(clock, track, player_car, computer_car, game_info, player_profile):
+    """The main game loop that draws the race and handles car movement.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     while True:
         clock.tick(FPS)
 
@@ -408,13 +477,7 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
         ################################################
         # for finding new track path
-        if click:
-            new_path_point = pygame.mouse.get_pos()
-            path_x, path_y = new_path_point
-            print(
-                f"- model: path\n  track_id: {track.track_id}\n  path_x: {path_x}\n  path_y: {path_y}\n"
-            )
-        computer_car.draw_points(WIN)
+        draw_computer_path(click, computer_car, track, WIN)
         ###############################################
 
         while not game_info.started:
@@ -425,7 +488,7 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     click = True
                 if event.type == pygame.KEYDOWN:
-                    game_info.start_level()
+                    game_info.start_race()
 
             width, height = 150, 20
 
@@ -480,6 +543,16 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
 
 def settings_loop(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays the main settings menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     while True:
         clock.tick(FPS)
 
@@ -518,6 +591,16 @@ def settings_loop(clock, track, player_car, computer_car, game_info, player_prof
 
 
 def car_settings(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays the car selection menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     all_cars = (
         models.Car.select(
             models.Car.car_id,
@@ -563,7 +646,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             button = Button(item.car_name, (255, 255, 255), 10, y, 200, 50, (255, 0, 0))
             car_buttons.append(button)
             stats_y = button.y + button.height / 2 - button.render_text.get_height() / 2
-            menu_button_text(
+            menu_text(
                 f"Speed:{item.max_vel}    Hand:{item.rotation_vel}    Acc:{item.acceleration}",
                 200,
                 stats_y,
@@ -582,6 +665,16 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
 
 
 def track_settings(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays the track selection menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     all_tracks = (
         models.Track.select(models.Track.track_id, models.Track.track_name)
         .order_by(models.Track.track_name)
@@ -643,6 +736,16 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
 
 
 def high_scores(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays the high scores screen for the current track.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     while True:
         clock.tick(FPS)
 
@@ -674,16 +777,16 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 
         x, y, score_pos = 150, 200, 1
         for item in top_scores:
-            menu_button_text(f"{score_pos}.", x - 50, y)
+            menu_text(f"{score_pos}.", x - 50, y)
             if (
                 models.Profanity.select()
                 .where(models.Profanity.word == item.name.lower())
                 .exists()
             ):
-                menu_button_text(censor_word(item.name), x, y)
+                menu_text(censor_word(item.name), x, y)
             else:
-                menu_button_text(item.name, x, y)
-            menu_button_text(str(round(item.time, 3)), x + 300, y)
+                menu_text(item.name, x, y)
+            menu_text(str(round(item.time, 3)), x + 300, y)
             y += 100
             score_pos += 1
 
@@ -693,10 +796,19 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 def profiles_settings(
     clock, track, player_car, computer_car, game_info, player_profile
 ):
+    """Displays the profile selection menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     all_profiles = (
         models.Profile.select(models.Profile.username)
         .order_by(models.Profile.username)
-        .limit(5)
     )
 
     start_index = 0
@@ -762,6 +874,16 @@ def profiles_settings(
 
 
 def create_profile(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays profile creation menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     name_entry_box = TextBox()
     while True:
         clock.tick(FPS)
@@ -812,7 +934,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
             click,
         )
 
-        menu_button_text("enter new username", 300, 200)
+        menu_text("enter new username", 300, 200)
 
         name_entry_box.draw_textbox()
 
@@ -834,7 +956,6 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                     last_car_id=player_car.car_id,
                     last_track_id=track.track_id,
                 )
-                con.commit()
                 player_profile = PlayerProfile(name_entry_box.text)
                 profiles_settings(
                     clock, track, player_car, computer_car, game_info, player_profile
@@ -844,6 +965,16 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
 
 
 def main_menu(clock, track, player_car, computer_car, game_info, player_profile):
+    """Displays the main menu.
+
+    Args:
+        clock -- pygame clock.
+        track -- current Track object.
+        player_car -- current PlayerCar object.
+        computer_car -- current ComputerCar object.
+        game_info -- GameInfo object.
+        player_profile -- current PlayerProfile object.
+    """
     while True:
         clock.tick(FPS)
 
@@ -901,6 +1032,7 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
 
 
 def main_game_loop():
+    """Creates the game clock and initial required objects, and then runs main menu loop."""
     clock = pygame.time.Clock()
 
     player_profile = PlayerProfile("default")

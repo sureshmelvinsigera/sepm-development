@@ -12,6 +12,7 @@ class PlayerProfile:
         self.last_track_id = lookup_profile.last_track_id
 
     def update_mute(self):
+        """Updates the player's mute preference and plays or pauses the music as appropriate."""
         if self.mute:
             self.mute = 0
             pygame.mixer.music.unpause()
@@ -25,6 +26,11 @@ class PlayerProfile:
             )
 
     def update_last_car_id(self, car_id):
+        """Updates the player's last used car, providing that the player isn't using the default profile.
+
+        Args:
+            car_id -- id of the newly chosen car
+        """
         self.last_car_id = car_id
 
         if self.username != "default":
@@ -33,6 +39,11 @@ class PlayerProfile:
             )
 
     def update_last_track_id(self, track_id):
+        """Updates the player's last chosen track, providing that the player isn't using the default profile.
+
+        Args:
+            track_id -- id of the newly chosen track
+        """
         self.last_track_id = track_id
 
         if self.username != "default":
