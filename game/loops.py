@@ -806,9 +806,8 @@ def profiles_settings(
         game_info -- GameInfo object.
         player_profile -- current PlayerProfile object.
     """
-    all_profiles = (
-        models.Profile.select(models.Profile.username)
-        .order_by(models.Profile.username)
+    all_profiles = models.Profile.select(models.Profile.username).order_by(
+        models.Profile.username
     )
 
     start_index = 0
