@@ -633,7 +633,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             )
             y += 100
 
-        for button in car_buttons[start_index:min(start_index+5, len(all_cars))]:
+        for button in car_buttons[start_index : min(start_index + 5, len(all_cars))]:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 id = car_ids[car_buttons.index(button)]
                 player_car = PlayerCar(id, track.player_start_position)
@@ -655,10 +655,9 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         game_info -- GameInfo object.
         player_profile -- current PlayerProfile object.
     """
-    all_tracks = (
-        models.Track.select(models.Track.track_id, models.Track.track_name)
-        .order_by(models.Track.track_name)
-    )
+    all_tracks = models.Track.select(
+        models.Track.track_id, models.Track.track_name
+    ).order_by(models.Track.track_name)
     start_index = 0
 
     while True:
@@ -686,7 +685,7 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         track_buttons = []
         track_ids = []
         y = 200
-        for item in all_tracks[start_index:min(start_index+5, len(all_tracks))]:
+        for item in all_tracks[start_index : min(start_index + 5, len(all_tracks))]:
             track_ids.append(item.track_id)
             button = Button(item.track_name, (255, 255, 255), 300, y, "menu-button")
             track_buttons.append(button)
@@ -754,7 +753,7 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 
         x, y = 150, 200
         score_pos = 1
-        for item in top_scores[start_index:min(start_index+5, len(top_scores))]:
+        for item in top_scores[start_index : min(start_index + 5, len(top_scores))]:
             menu_text(f"{start_index + score_pos}.", x - 50, y)
             if (
                 models.Profanity.select()
@@ -827,7 +826,9 @@ def profiles_settings(
 
         profile_buttons = []
         y = 200
-        for profile in all_profiles[start_index:min(start_index+5, len(all_profiles))]:
+        for profile in all_profiles[
+            start_index : min(start_index + 5, len(all_profiles))
+        ]:
             profile_buttons.append(
                 Button(profile.username, (255, 255, 255), 250, y, "menu-button-large")
             )
@@ -980,7 +981,9 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
         if play_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
-        settings_button = Button("Settings", (255, 255, 255), 250, 300, "menu-button-large")
+        settings_button = Button(
+            "Settings", (255, 255, 255), 250, 300, "menu-button-large"
+        )
         if settings_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             settings_loop(
                 clock, track, player_car, computer_car, game_info, player_profile
@@ -997,7 +1000,9 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
                 clock, track, player_car, computer_car, game_info, player_profile
             )
 
-        profiles_button = Button("profiles", (255, 255, 255), 250, 500, "menu-button-large")
+        profiles_button = Button(
+            "profiles", (255, 255, 255), 250, 500, "menu-button-large"
+        )
         if profiles_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             profiles_settings(
                 clock, track, player_car, computer_car, game_info, player_profile
