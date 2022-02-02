@@ -135,9 +135,14 @@ class ComputerCar(Car):
         if target_y > self.y:
             desired_angle += pi
 
+        if desired_angle > 2 * pi:
+            desired_angle -= 2 * pi
+
         difference_in_angle = self.angle - degrees(desired_angle)
         if difference_in_angle >= 180:
             difference_in_angle -= 360
+        if difference_in_angle < -180:
+            difference_in_angle += 360
 
         if difference_in_angle > 0:
             self.angle -= min(self.rotation_vel, abs(difference_in_angle))
