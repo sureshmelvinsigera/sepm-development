@@ -47,23 +47,37 @@ class GameInfo:
 
 
 class Button:
-    def __init__(
-        self, text, text_colour, x, y, width, height, button_colour, size=True
-    ):
+    """self.width = width
+    self.height = height
+    self.button_colour = button_colour
+
+    if size:
+        self.render_text = MAIN_FONT.render(self.text, 1, self.text_colour)
+    else:
+        self.render_text = SMALL_FONT.render(self.text, 1, self.text_colour)
+
+    self.button_rect = pygame.Rect(self.x, self.y, self.width, self.height)"""
+
+    def __init__(self, text, text_colour, x, y, button_type):
         self.text = text.upper()
         self.text_colour = text_colour
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
-        self.button_colour = button_colour
+        self.button_position = (self.x, self.y)
+        self.render_text = MAIN_FONT.render(self.text, 1, self.text_colour)
 
-        if size:
-            self.render_text = MAIN_FONT.render(self.text, 1, self.text_colour)
-        else:
-            self.render_text = SMALL_FONT.render(self.text, 1, self.text_colour)
+        self.image_path = f"assets/interface/{button_type}.png"
+        self.button_image = pygame.image.load(self.image_path)
 
-        self.button_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.width = self.button_image.get_width()
+        self.height = self.button_image.get_height()
+
+        self.button_rect = pygame.Rect(
+            self.x,
+            self.y,
+            self.button_image.get_width(),
+            self.button_image.get_height(),
+        )
 
         self.draw_button()
 
@@ -72,14 +86,18 @@ class Button:
         WIN.blit(
             self.render_text,
             (
-                self.x + self.width / 2 - self.render_text.get_width() / 2,
-                self.y + self.height / 2 - self.render_text.get_height() / 2,
+                self.x
+                + self.button_image.get_width() / 2
+                - self.render_text.get_width() / 2,
+                self.y
+                + self.button_image.get_height() / 2
+                - self.render_text.get_height() / 2,
             ),
         )
 
     def draw_button(self):
         """Draws the button and button text."""
-        pygame.draw.rect(WIN, self.button_colour, self.button_rect)
+        WIN.blit(self.button_image, self.button_position)
         self.button_text()
 
 
@@ -187,29 +205,18 @@ def menu_basic(
     if menu_name != "game":
         menu_title(menu_name)
 
-    mute = "mute"
+    mute = "sound-on"
     if player_profile.mute:
-        mute = "unmute"
+        mute = "sound-off"
 
     width, height = 150, 20
 
-    mute_button = Button(
-        mute,
-        (255, 255, 255),
-        WIN.get_width() - width - 10,
-        10,
-        width,
-        height,
-        (255, 0, 0),
-        False,
-    )
+    mute_button = Button("", (255, 255, 255), WIDTH - 100, 10, mute)
     if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
         player_profile.update_mute()
 
     if menu_name != "main menu":
-        main_menu_button = Button(
-            "main menu", (255, 255, 255), 10, 10, width, height, (255, 0, 0), False
-        )
+        main_menu_button = Button("", (255, 255, 255), 10, 10, "main-menu")
         if main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             game_info.reset()
             player_car.reset()
@@ -222,9 +229,7 @@ def menu_basic(
             main_menu(clock, track, player_car, computer_car, game_info, player_profile)
 
         if menu_name != "game" and previous_menu in ["settings", "profiles"]:
-            back_button = Button(
-                "Back", (255, 255, 255), 10, 40, width, height, (255, 0, 0), False
-            )
+            back_button = Button("", (255, 255, 255), 10, 80, "back")
             if back_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 if previous_menu == "settings":
                     settings_loop(
@@ -265,32 +270,19 @@ def menu_bottom_nav_buttons(start_index, all_list, click):
         all_list -- list of all data being displayed.
         click -- boolean based on if the player has clicked their mouse.
     """
-    width, height = 150, 30
     if start_index + 5 < len(all_list):
         next_button = Button(
-            "next",
+            "",
             (255, 255, 255),
-            WIN.get_width() - width - 10,
-            WIN.get_height() - height - 10,
-            150,
-            30,
-            (255, 0, 0),
-            False,
+            WIDTH - 100,
+            HEIGHT - 100,
+            "forward",
         )
         if next_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             start_index += 5
 
     if start_index > 0:
-        previous_button = Button(
-            "previous",
-            (255, 255, 255),
-            10,
-            WIN.get_height() - height - 10,
-            150,
-            30,
-            (255, 0, 0),
-            False,
-        )
+        previous_button = Button("", (255, 255, 255), 10, HEIGHT - 100, "back")
         if previous_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             start_index -= 5
 
@@ -369,7 +361,7 @@ def high_score_name_entry(
 
         name_entry_box.draw_textbox()
 
-        done_button = Button("done", (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
+        done_button = Button("done", (255, 255, 255), 300, 500, "menu-button")
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if name_entry_box.text != "":
                 models.HighScore.create(
@@ -492,26 +484,15 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
             width, height = 150, 20
 
-            mute = "mute"
+            mute = "sound-on"
             if player_profile.mute:
-                mute = "unmute"
+                mute = "sound-off"
 
-            mute_button = Button(
-                mute,
-                (255, 255, 255),
-                WIN.get_width() - width - 10,
-                10,
-                width,
-                height,
-                (255, 0, 0),
-                False,
-            )
+            mute_button = Button("", (255, 255, 255), WIDTH - 100, 10, mute)
             if mute_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 player_profile.update_mute()
 
-            main_menu_button = Button(
-                "main menu", (255, 255, 255), 10, 10, width, height, (255, 0, 0), False
-            )
+            main_menu_button = Button("", (255, 255, 255), 10, 10, "main-menu")
             if (
                 main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos())
                 and click
@@ -575,13 +556,13 @@ def settings_loop(clock, track, player_car, computer_car, game_info, player_prof
             click,
         )
 
-        car_button = Button("car", (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
+        car_button = Button("car", (255, 255, 255), 300, 200, "menu-button")
         if car_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             car_settings(
                 clock, track, player_car, computer_car, game_info, player_profile
             )
 
-        track_button = Button("track", (255, 255, 255), 300, 300, 200, 50, (255, 0, 0))
+        track_button = Button("track", (255, 255, 255), 300, 300, "menu-button")
         if track_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             track_settings(
                 clock, track, player_car, computer_car, game_info, player_profile
@@ -611,7 +592,6 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
         )
         .where(models.Car.car_id != "black_car")
         .order_by(models.Car.car_name)
-        .limit(5)
     )
 
     start_index = 0
@@ -643,7 +623,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
         y = 200
         for item in all_cars:
             car_ids.append(item.car_id)
-            button = Button(item.car_name, (255, 255, 255), 10, y, 200, 50, (255, 0, 0))
+            button = Button(item.car_name, (255, 255, 255), 10, y, "menu-button")
             car_buttons.append(button)
             stats_y = button.y + button.height / 2 - button.render_text.get_height() / 2
             menu_text(
@@ -653,7 +633,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             )
             y += 100
 
-        for button in car_buttons:
+        for button in car_buttons[start_index : min(start_index + 5, len(all_cars))]:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 id = car_ids[car_buttons.index(button)]
                 player_car = PlayerCar(id, track.player_start_position)
@@ -675,11 +655,9 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         game_info -- GameInfo object.
         player_profile -- current PlayerProfile object.
     """
-    all_tracks = (
-        models.Track.select(models.Track.track_id, models.Track.track_name)
-        .order_by(models.Track.track_name)
-        .limit(5)
-    )
+    all_tracks = models.Track.select(
+        models.Track.track_id, models.Track.track_name
+    ).order_by(models.Track.track_name)
     start_index = 0
 
     while True:
@@ -707,11 +685,9 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         track_buttons = []
         track_ids = []
         y = 200
-        for item in all_tracks:
+        for item in all_tracks[start_index : min(start_index + 5, len(all_tracks))]:
             track_ids.append(item.track_id)
-            button = Button(
-                item.track_name, (255, 255, 255), 300, y, 200, 50, (255, 0, 0)
-            )
+            button = Button(item.track_name, (255, 255, 255), 300, y, "menu-button")
             track_buttons.append(button)
             y += 100
 
@@ -746,6 +722,13 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
         game_info -- GameInfo object.
         player_profile -- current PlayerProfile object.
     """
+    top_scores = (
+        models.HighScore.select(models.HighScore.name, models.HighScore.time)
+        .where(models.HighScore.track_id == track.track_id)
+        .order_by(models.HighScore.time)
+        .limit(50)
+    )
+    start_index = 0
     while True:
         clock.tick(FPS)
 
@@ -768,16 +751,10 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
             click,
         )
 
-        top_scores = (
-            models.HighScore.select(models.HighScore.name, models.HighScore.time)
-            .where(models.HighScore.track_id == track.track_id)
-            .order_by(models.HighScore.time)
-            .limit(5)
-        )
-
-        x, y, score_pos = 150, 200, 1
-        for item in top_scores:
-            menu_text(f"{score_pos}.", x - 50, y)
+        x, y = 150, 200
+        score_pos = 1
+        for item in top_scores[start_index : min(start_index + 5, len(top_scores))]:
+            menu_text(f"{start_index + score_pos}.", x - 50, y)
             if (
                 models.Profanity.select()
                 .where(models.Profanity.word == item.name.lower())
@@ -789,6 +766,8 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
             menu_text(str(round(item.time, 3)), x + 300, y)
             y += 100
             score_pos += 1
+
+        start_index = menu_bottom_nav_buttons(start_index, top_scores, click)
 
         pygame.display.update()
 
@@ -829,13 +808,13 @@ def profiles_settings(
             computer_car,
             game_info,
             player_profile,
-            "create profile",
+            "profiles",
             "main menu",
             click,
         )
 
         create_profile_button = Button(
-            "create profile", (255, 255, 255), 300, 100, 200, 50, (255, 0, 0)
+            "new profile", (255, 255, 255), 250, 100, "menu-button-large"
         )
         if (
             create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos())
@@ -847,9 +826,11 @@ def profiles_settings(
 
         profile_buttons = []
         y = 200
-        for profile in all_profiles:
+        for profile in all_profiles[
+            start_index : min(start_index + 5, len(all_profiles))
+        ]:
             profile_buttons.append(
-                Button(profile.username, (255, 255, 255), 300, y, 200, 50, (255, 0, 0))
+                Button(profile.username, (255, 255, 255), 250, y, "menu-button-large")
             )
             y += 100
 
@@ -937,7 +918,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
 
         name_entry_box.draw_textbox()
 
-        done_button = Button("done", (255, 255, 255), 300, 500, 200, 50, (255, 0, 0))
+        done_button = Button("done", (255, 255, 255), 300, 500, "menu-button")
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if (
                 name_entry_box.text != ""
@@ -996,12 +977,12 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             click,
         )
 
-        play_button = Button("Play", (255, 255, 255), 300, 200, 200, 50, (255, 0, 0))
+        play_button = Button("Play", (255, 255, 255), 250, 200, "menu-button-large")
         if play_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
         settings_button = Button(
-            "Settings", (255, 255, 255), 300, 300, 200, 50, (255, 0, 0)
+            "Settings", (255, 255, 255), 250, 300, "menu-button-large"
         )
         if settings_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             settings_loop(
@@ -1009,7 +990,7 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             )
 
         high_scores_button = Button(
-            "High Scores", (255, 255, 255), 300, 400, 200, 50, (255, 0, 0)
+            "records", (255, 255, 255), 250, 400, "menu-button-large"
         )
         if (
             high_scores_button.button_rect.collidepoint(pygame.mouse.get_pos())
@@ -1020,7 +1001,7 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             )
 
         profiles_button = Button(
-            "profiles", (255, 255, 255), 300, 500, 200, 50, (255, 0, 0)
+            "profiles", (255, 255, 255), 250, 500, "menu-button-large"
         )
         if profiles_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             profiles_settings(
