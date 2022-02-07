@@ -1,6 +1,6 @@
+import re
 from os import listdir
 from os.path import exists
-import re
 
 from tests.base.BaseTestCase import BaseTestCase
 

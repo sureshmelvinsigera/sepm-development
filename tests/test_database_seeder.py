@@ -1,6 +1,8 @@
-from tests.base.BaseTestCase import BaseTestCase
-import yaml
 import os
+
+import yaml
+
+from tests.base.BaseTestCase import BaseTestCase
 
 
 class TestDatabaseSeeder(BaseTestCase):

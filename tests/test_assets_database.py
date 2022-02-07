@@ -1,6 +1,7 @@
-from tests.base.BaseTestCase import BaseTestCase
-from database.models import Car, Track
 from os.path import exists
+
+from database.models import Car, Track
+from tests.base.BaseTestCase import BaseTestCase
 
 
 class TestDatabaseAssetsExist(BaseTestCase):

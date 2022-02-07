@@ -1,5 +1,5 @@
-from tests.base.BaseTestCase import BaseTestCase
 from game.utilities import censor_word
+from tests.base.BaseTestCase import BaseTestCase
 
 
 class TestCensorship(BaseTestCase):
