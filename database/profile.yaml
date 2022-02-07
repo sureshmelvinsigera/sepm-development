@@ -19,7 +19,7 @@
 - model: Profile
   username: test name
   mute: 0
-  last_car_id: purple_car
+  last_car_id: blue_car
   last_track_id: track_1
 
 - model: Profile
@@ -43,7 +43,7 @@
 - model: Profile
   username: testing
   mute: 0
-  last_car_id: purple_car
+  last_car_id: yellow_car
   last_track_id: track_1
 
 - model: Profile
@@ -67,7 +67,7 @@
 - model: Profile
   username: alex
   mute: 0
-  last_car_id: purple_car
+  last_car_id: black_car
   last_track_id: track_1
 
 - model: Profile
@@ -91,5 +91,5 @@
 - model: Profile
   username: antonios
   mute: 0
-  last_car_id: purple_car
+  last_car_id: green_car
   last_track_id: track_1
