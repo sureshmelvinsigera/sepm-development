@@ -469,7 +469,7 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
         ################################################
         # for finding new track path
-        draw_computer_path(click, computer_car, track, WIN)
+        # draw_computer_path(click, computer_car, track, WIN)
         ###############################################
 
         while not game_info.started:
