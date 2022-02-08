@@ -63,6 +63,11 @@ def draw_computer_path(click, computer_car, track, win):
 
 
 def censor_word(word):
+    """Censors the given word using asterisk's for padding.
+
+    Args:
+        word -- string containing the word to be censored
+    """
     if word:
         censored_word = str(word[0] + ("*" * len(word[1:-1])) + word[-1])
         return censored_word
