@@ -174,15 +174,15 @@ def menu_title(menu_name):
 
 
 def menu_basic(
-        clock,
-        track,
-        player_car,
-        computer_car,
-        game_info,
-        player_profile,
-        menu_name,
-        previous_menu,
-        click,
+    clock,
+    track,
+    player_car,
+    computer_car,
+    game_info,
+    player_profile,
+    menu_name,
+    previous_menu,
+    click,
 ):
     """Draws the basic menu screen, or game window, and navigation buttons as appropriate.
 
@@ -289,7 +289,7 @@ def menu_bottom_nav_buttons(start_index, all_list, click):
 
 
 def high_score_name_entry(
-        clock, track, player_car, computer_car, game_info, time, player_profile
+    clock, track, player_car, computer_car, game_info, time, player_profile
 ):
     """Displays the name entry screen for the player to save their race time.
 
@@ -493,8 +493,8 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
             main_menu_button = Button("", (255, 255, 255), 10, 10, "main-menu")
             if (
-                    main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos())
-                    and click
+                main_menu_button.button_rect.collidepoint(pygame.mouse.get_pos())
+                and click
             ):
                 game_info.reset()
                 player_car.reset()
@@ -589,8 +589,8 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             models.Car.rotation_vel,
             models.Car.acceleration,
         )
-            .where(models.Car.car_id != "black_car")
-            .order_by(models.Car.car_name)
+        .where(models.Car.car_id != "black_car")
+        .order_by(models.Car.car_name)
     )
 
     start_index = 0
@@ -632,7 +632,7 @@ def car_settings(clock, track, player_car, computer_car, game_info, player_profi
             )
             y += 100
 
-        for button in car_buttons[start_index: min(start_index + 5, len(all_cars))]:
+        for button in car_buttons[start_index : min(start_index + 5, len(all_cars))]:
             if button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
                 id = car_ids[car_buttons.index(button)]
                 player_car = PlayerCar(id, track.player_start_position)
@@ -684,7 +684,7 @@ def track_settings(clock, track, player_car, computer_car, game_info, player_pro
         track_buttons = []
         track_ids = []
         y = 200
-        for item in all_tracks[start_index: min(start_index + 5, len(all_tracks))]:
+        for item in all_tracks[start_index : min(start_index + 5, len(all_tracks))]:
             track_ids.append(item.track_id)
             button = Button(item.track_name, (255, 255, 255), 300, y, "menu-button")
             track_buttons.append(button)
@@ -723,9 +723,9 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
     """
     top_scores = (
         models.HighScore.select(models.HighScore.name, models.HighScore.time)
-            .where(models.HighScore.track_id == track.track_id)
-            .order_by(models.HighScore.time)
-            .limit(50)
+        .where(models.HighScore.track_id == track.track_id)
+        .order_by(models.HighScore.time)
+        .limit(50)
     )
     start_index = 0
     while True:
@@ -752,12 +752,12 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 
         x, y = 150, 200
         score_pos = 1
-        for item in top_scores[start_index: min(start_index + 5, len(top_scores))]:
+        for item in top_scores[start_index : min(start_index + 5, len(top_scores))]:
             menu_text(f"{start_index + score_pos}.", x - 50, y)
             if (
-                    models.Profanity.select()
-                            .where(models.Profanity.word == item.name.lower())
-                            .exists()
+                models.Profanity.select()
+                .where(models.Profanity.word == item.name.lower())
+                .exists()
             ):
                 menu_text(censor_word(item.name), x, y)
             else:
@@ -772,7 +772,7 @@ def high_scores(clock, track, player_car, computer_car, game_info, player_profil
 
 
 def profiles_settings(
-        clock, track, player_car, computer_car, game_info, player_profile
+    clock, track, player_car, computer_car, game_info, player_profile
 ):
     """Displays the profile selection menu.
 
@@ -816,8 +816,8 @@ def profiles_settings(
             "new profile", (255, 255, 255), 250, 100, "menu-button-large"
         )
         if (
-                create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos())
-                and click
+            create_profile_button.button_rect.collidepoint(pygame.mouse.get_pos())
+            and click
         ):
             create_profile(
                 clock, track, player_car, computer_car, game_info, player_profile
@@ -826,8 +826,8 @@ def profiles_settings(
         profile_buttons = []
         y = 200
         for profile in all_profiles[
-                       start_index: min(start_index + 5, len(all_profiles))
-                       ]:
+            start_index : min(start_index + 5, len(all_profiles))
+        ]:
             profile_buttons.append(
                 Button(profile.username, (255, 255, 255), 250, y, "menu-button-large")
             )
@@ -879,11 +879,11 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 name_entry_box.update_text(event)
 
                 if (
-                        event.key == pygame.K_RETURN
-                        and len(name_entry_box.text) != 0
-                        and not models.Profile.select()
-                        .where(models.Profile.username == name_entry_box.text)
-                        .exists()
+                    event.key == pygame.K_RETURN
+                    and len(name_entry_box.text) != 0
+                    and not models.Profile.select()
+                    .where(models.Profile.username == name_entry_box.text)
+                    .exists()
                 ):
                     models.Profile.create(
                         username=name_entry_box.text,
@@ -920,14 +920,14 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
         done_button = Button("done", (255, 255, 255), 300, 500, "menu-button")
         if done_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             if (
-                    name_entry_box.text != ""
-                    # and name_entry_box.text
-                    # not in cur.execute(
-                    #     """SELECT username FROM player_profiles"""
-                    # ).fetchall()
-                    and not models.Profile.select()
-                    .where(models.Profile.username == name_entry_box.text)
-                    .exists()
+                name_entry_box.text != ""
+                # and name_entry_box.text
+                # not in cur.execute(
+                #     """SELECT username FROM player_profiles"""
+                # ).fetchall()
+                and not models.Profile.select()
+                .where(models.Profile.username == name_entry_box.text)
+                .exists()
             ):
                 models.Profile.create(
                     username=name_entry_box.text,
@@ -992,8 +992,8 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             "records", (255, 255, 255), 250, 400, "menu-button-large"
         )
         if (
-                high_scores_button.button_rect.collidepoint(pygame.mouse.get_pos())
-                and click
+            high_scores_button.button_rect.collidepoint(pygame.mouse.get_pos())
+            and click
         ):
             high_scores(
                 clock, track, player_car, computer_car, game_info, player_profile
