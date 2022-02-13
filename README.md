@@ -62,7 +62,7 @@ cd sepm-development
 
 ```bash
 python -m venv venv
-.\env\Scripts\activate
+.\venv\Scripts\activate
 ```
 
 Once you have executed the above commands, the command cursor in your terminal session should be prefixed with the
