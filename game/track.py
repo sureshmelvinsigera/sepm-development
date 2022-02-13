@@ -46,7 +46,7 @@ class Track:
         Args:
             win -- window, or surface, the track will be drawn on.
         """
-        win.blit(self.background_image, (0, 0))
-        win.blit(self.track_image, (0, 0))
-        win.blit(self.finish_image, self.finish_position)
-        win.blit(self.border_image, (0, 0))
+        win.blit(self.background_image, (0, 0))     # draws track background
+        win.blit(self.track_image, (0, 0))      # draws track
+        win.blit(self.finish_image, self.finish_position)       # draws finish line
+        win.blit(self.border_image, (0, 0))     # draws track border for collision detection

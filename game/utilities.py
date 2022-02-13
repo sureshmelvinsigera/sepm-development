@@ -8,7 +8,9 @@ def scale_image(image, factor):
         image -- the image file to be scaled.
         factor -- the scale factor.
     """
+    # finds the new width and height of the image as tuple
     size = round(image.get_width() * factor), round(image.get_height() * factor)
+    # returns the new image, scaled appropriately
     return pygame.transform.scale(image, size)
 
 
@@ -21,8 +23,11 @@ def blit_rotate_center(win, image, top_left, angle):
         top_left -- (x, y) co-ordinate of the top left corner.
         angle -- rotation angle.
     """
+    # rotates the image about its top  left corner
     rotated_image = pygame.transform.rotate(image, angle)
+    # new rect adjusting centre  to the centre of the image before rotation
     new_rect = rotated_image.get_rect(center=image.get_rect(topleft=top_left).center)
+    # draws image onto new rect
     win.blit(rotated_image, new_rect.topleft)
 
 
@@ -34,7 +39,9 @@ def blit_text_center(win, font, text):
         font -- text font.
         text -- the text to be printed on the window.
     """
+    # renders grey text  in passed in font
     render = font.render(text, 1, (200, 200, 200))
+    # draws text onto the centre of the game window
     win.blit(
         render,
         (
@@ -45,7 +52,7 @@ def blit_text_center(win, font, text):
 
 
 def draw_computer_path(click, computer_car, track, win):
-    """Draws the computer car's path as a series of red dots.
+    """Draws the computer car's path as a series of red dots. Prints new points if mouse click.
 
     Args:
         click -- boolean based on if the player clicked their mouse or not.
@@ -53,12 +60,17 @@ def draw_computer_path(click, computer_car, track, win):
         track -- current Track object.
         win -- the game window for dots to be drawn on.
     """
+
     if click:
-        new_path_point = pygame.mouse.get_pos()
-        path_x, path_y = new_path_point
+        # gets the (x, y) co-ord of the mouse if the user clicks the mouse button.
+        path_x, path_y = pygame.mouse.get_pos()
+
+        # prints the mouse co-ords formatted such that they can be copied directly into the path.yaml database file.
         print(
             f"- model: path\n  track_id: {track.track_id}\n  path_x: {path_x}\n  path_y: {path_y}\n"
         )
+
+    # draws the current car path points as red dots .
     computer_car.draw_points(win)
 
 

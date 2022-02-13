@@ -21,6 +21,7 @@ class PlayerProfile:
             pygame.mixer.music.pause()
 
         if self.username != "default":
+            # updates the players mute preference in the database if the player is not using the default profile.
             models.Profile.update(mute=self.mute).where(
                 models.Profile.username == self.username
             )
@@ -34,6 +35,7 @@ class PlayerProfile:
         self.last_car_id = car_id
 
         if self.username != "default":
+            # updates the player's car prerference in the database when if the player is not using the default profile.
             models.Profile.update(last_car_id=car_id).where(
                 models.Profile.username == self.username
             )
@@ -47,6 +49,7 @@ class PlayerProfile:
         self.last_track_id = track_id
 
         if self.username != "default":
+            # updates the player's track preference in the database when if the player is not using the default profile.
             models.Profile.update(last_track_id=track_id).where(
                 models.Profile.username == self.username
             )
