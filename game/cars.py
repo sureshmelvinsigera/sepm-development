@@ -73,8 +73,8 @@ class Car:
 class PlayerCar(Car):
     def bounce(self):
         """Reverses direction if the car collides with the track."""
-        self.vel = -self.vel / 2        # reverses velocity direction and halves
-        self.move()     # moves car with new velocity
+        self.vel = -self.vel / 2  # reverses velocity direction and halves
+        self.move()  # moves car with new velocity
 
     def move_player(self):
         """Controls for player movement based on the key input."""
@@ -136,8 +136,8 @@ class ComputerCar(Car):
         and adjusts the car's rotation appropriately."""
         target_x = list(self.path)[self.current_point].path_x
         target_y = list(self.path)[self.current_point].path_y
-        x_delta = target_x - self.x     # horizontal distance to travel
-        y_delta = target_y - self.y     # vertical distance to travel
+        x_delta = target_x - self.x  # horizontal distance to travel
+        y_delta = target_y - self.y  # vertical distance to travel
 
         if y_delta == 0:
             # if no vertical distance to travel then desired rotation is pi/2 rad
@@ -184,6 +184,6 @@ class ComputerCar(Car):
     def move(self):
         """Moves the computer car if the car hasn't reached the end of its path"""
         if self.current_point < len(self.path):
-            self.calculate_angle()      # calculates angle and rotates car
-            self.update_path_point()        # updates path if necessary
-            super().move()      # moves car using move method from Car
+            self.calculate_angle()  # calculates angle and rotates car
+            self.update_path_point()  # updates path if necessary
+            super().move()  # moves car using move method from Car
