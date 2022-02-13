@@ -946,8 +946,10 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 click = True
 
             if event.type == pygame.KEYDOWN:
+
                 # updates text in text box when user types
-                name_entry_box.update_text(event)
+                if event.key != pygame.K_RETURN:
+                    name_entry_box.update_text(event)
 
                 if (
                     event.key == pygame.K_RETURN
@@ -955,8 +957,12 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                     and not models.Profile.select()
                     .where(models.Profile.username == name_entry_box.text)
                     .exists()
+                    and not models.Profanity.select()
+                    .where(models.Profanity.word == name_entry_box.text.lower())
+                    .exists()
                 ):
                     # creates new profile with current preferences if the entered name is not already in the database
+                    # and not profanity when user presses enter
                     models.Profile.create(
                         username=name_entry_box.text,
                         mute=player_profile.mute,
@@ -973,6 +979,19 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                         game_info,
                         player_profile,
                     )
+
+                # profanity check
+                # does not allow profanity to be saved as username
+                elif (
+                    event.key == pygame.K_RETURN
+                    and models.Profanity.select()
+                    .where(models.Profanity.word == name_entry_box.text.lower())
+                    .exists()
+                ):
+                    blit_text_center(WIN, MAIN_FONT, "username cannot be profanity!")
+                    pygame.display.update()
+                    pygame.time.wait(2000)
+                    name_entry_box.text = ""
 
         menu_basic(
             clock,
@@ -1000,6 +1019,9 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 and not models.Profile.select()
                 .where(models.Profile.username == name_entry_box.text)
                 .exists()
+                and not models.Profanity.select()
+                .where(models.Profanity.word == name_entry_box.text.lower())
+                .exists()
             ):
                 models.Profile.create(
                     username=name_entry_box.text,
@@ -1012,6 +1034,16 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 profiles_settings(
                     clock, track, player_car, computer_car, game_info, player_profile
                 )
+
+            elif (
+                    models.Profanity.select()
+                    .where(models.Profanity.word == name_entry_box.text.lower())
+                    .exists()
+            ):
+                blit_text_center(WIN, MAIN_FONT, "username cannot be profanity!")
+                pygame.display.update()
+                pygame.time.wait(2000)
+                name_entry_box.text = ""
 
         pygame.display.update()
 
