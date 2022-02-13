@@ -40,7 +40,7 @@ def blit_text_center(win, font, text):
         text -- the text to be printed on the window.
     """
     # renders grey text  in passed in font
-    render = font.render(text, 1, (255, 255, 255))
+    render = font.render(text, 1, (0, 0, 0))
     # draws text onto the centre of the game window
     win.blit(
         render,
