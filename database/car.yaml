@@ -10,8 +10,8 @@
   car_id: green_car
   car_name: GREEN
   car_path: assets/images/cars/green-car.png
-  max_vel: 4
-  rotation_vel: 4
+  max_vel: 6
+  rotation_vel: 3
   acceleration: 1
 
 - model: Car
@@ -26,14 +26,14 @@
   car_id: blue_car
   car_name: BLUE
   car_path: assets/images/cars/blue-car.png
-  max_vel: 4
-  rotation_vel: 4
+  max_vel: 3
+  rotation_vel: 5
   acceleration: 1
 
 - model: Car
   car_id: yellow_car
   car_name: YELLOW
   car_path: assets/images/cars/yellow-car.png
-  max_vel: 4
-  rotation_vel: 4
-  acceleration: 1
+  max_vel: 2
+  rotation_vel: 6
+  acceleration: 2
