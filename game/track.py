@@ -20,7 +20,7 @@ class Track:
         self.finish_y = lookup_track.finish_y
 
         self.track_record = (
-            models.HighScore.select().order_by(models.HighScore.time.desc()).get().time
+            models.HighScore.select().order_by(models.HighScore.time.asc()).get().time
         )
         self.computer_path = (
             models.Path.select(models.Path.path_x, models.Path.path_y)
