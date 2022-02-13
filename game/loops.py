@@ -36,17 +36,18 @@ class GameInfo:
     def start_race(self):
         """Sets start to true and gets start time."""
         self.started = True
-        self.race_start_time = time.time()      # current time when game starts
+        self.race_start_time = time.time()  # current time when game starts
 
     def get_race_time(self):
         """Returns race time if race is started."""
         if not self.started:
             return 0
-        return round(time.time() - self.race_start_time, 2)     # current time minus start time
+        return round(
+            time.time() - self.race_start_time, 2
+        )  # current time minus start time
 
 
 class Button:
-
     def __init__(self, text, text_colour, x, y, button_type):
         self.text = text.upper()
         self.text_colour = text_colour
@@ -86,8 +87,8 @@ class Button:
 
     def draw_button(self):
         """Draws the button and button text."""
-        WIN.blit(self.button_image, self.button_position)       # draws button
-        self.button_text()      # draws text
+        WIN.blit(self.button_image, self.button_position)  # draws button
+        self.button_text()  # draws text
 
 
 class TextBox:
@@ -116,8 +117,10 @@ class TextBox:
 
     def draw_textbox(self):
         """Draws the text box"""
-        pygame.draw.rect(WIN, self.background_colour, self.textbox_rect)        # draws text box
-        self.input_text()       # draws text
+        pygame.draw.rect(
+            WIN, self.background_colour, self.textbox_rect
+        )  # draws text box
+        self.input_text()  # draws text
 
     def update_text(self, event):
         """Updates the text in the text box if the string is less than 8 characters.
@@ -378,9 +381,7 @@ def high_score_name_entry(
                     name=name_entry_box.text, time=time, track_id=track.track_id
                 )
 
-            game_loop(
-                clock, track, player_car, computer_car, game_info, player_profile
-            )
+            game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
         pygame.display.update()
 
@@ -535,8 +536,8 @@ def game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
             pygame.display.update()
 
-        player_car.move_player()        # moves player car according to user key presses
-        computer_car.move()     # moves computer car towards next point in path
+        player_car.move_player()  # moves player car according to user key presses
+        computer_car.move()  # moves computer car towards next point in path
 
         # collision detection between cars, track borders, and finish line
         handle_collision(
@@ -879,8 +880,8 @@ def profiles_settings(
                 clock, track, player_car, computer_car, game_info, player_profile
             )
 
-        profile_buttons = []        # profile button list
-        y = 200     # lowest y co-ord for profile buttons on screen
+        profile_buttons = []  # profile button list
+        y = 200  # lowest y co-ord for profile buttons on screen
 
         # draws up to five buttons on the screen
         for profile in all_profiles[
