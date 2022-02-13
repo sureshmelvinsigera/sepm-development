@@ -251,6 +251,7 @@ def menu_basic(
                         player_profile,
                     )
 
+
     # draws track record and race time onto screen when game is being played
     if menu_name == "game":
         time_text = MAIN_FONT.render(
@@ -262,6 +263,13 @@ def menu_basic(
             f"Record: {track.track_record}s", 1, (255, 255, 255)
         )
         WIN.blit(time_text, (10, HEIGHT - time_text.get_height()))
+
+    # displays current user profile at bottom of screen
+    else:
+        profile_text = MAIN_FONT.render(
+            f"Profile: {player_profile.username.upper()}", 1, (255, 255, 255)
+        )
+        WIN.blit(profile_text, (WIDTH // 2 - profile_text.get_width() // 2, HEIGHT - profile_text.get_height() - 40))
 
 
 def menu_bottom_nav_buttons(start_index, all_list, click):
