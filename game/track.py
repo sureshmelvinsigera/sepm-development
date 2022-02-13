@@ -20,8 +20,7 @@ class Track:
         self.finish_y = lookup_track.finish_y
 
         self.track_record = (
-            models
-            .HighScore.select()
+            models.HighScore.select()
             .where(models.HighScore.track_id == self.track_id)
             .order_by(models.HighScore.time.asc())
             .get()

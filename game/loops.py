@@ -251,7 +251,6 @@ def menu_basic(
                         player_profile,
                     )
 
-
     # draws track record and race time onto screen when game is being played
     if menu_name == "game":
         time_text = MAIN_FONT.render(
@@ -269,7 +268,13 @@ def menu_basic(
         profile_text = MAIN_FONT.render(
             f"Profile: {player_profile.username.upper()}", 1, (255, 255, 255)
         )
-        WIN.blit(profile_text, (WIDTH // 2 - profile_text.get_width() // 2, HEIGHT - profile_text.get_height() - 40))
+        WIN.blit(
+            profile_text,
+            (
+                WIDTH // 2 - profile_text.get_width() // 2,
+                HEIGHT - profile_text.get_height() - 40,
+            ),
+        )
 
 
 def menu_bottom_nav_buttons(start_index, all_list, click):
@@ -1036,9 +1041,9 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 )
 
             elif (
-                    models.Profanity.select()
-                    .where(models.Profanity.word == name_entry_box.text.lower())
-                    .exists()
+                models.Profanity.select()
+                .where(models.Profanity.word == name_entry_box.text.lower())
+                .exists()
             ):
                 blit_text_center(WIN, MAIN_FONT, "Username cannot be profanity!")
                 pygame.display.update()
