@@ -51,12 +51,12 @@ requirements has been included below:
 This code has been developed and tested using all major releases of Python 3.x. In order to run a copy on your local
 machine, please execute the following commands in a terminal session.
 
-### Create Project Directory
+### Clone the GitHub Repository
 
 ```bash
-mkdir Projects
-cd Projects
-````
+(venv) git clone git@github.com:AlexGeorgeLain/sepm-development.git
+(venv) cd sepm-development
+```
 
 ### Enter Virtual Environment
 
@@ -69,14 +69,7 @@ Once you have executed the above commands, the command cursor in your terminal s
 virtual environment name (venv), similar to the example below.
 
 ```bash
-(venv) C:\Projects\
-```
-
-### Clone the GitHub Repository
-
-```bash
-(venv) git clone git@github.com:AlexGeorgeLain/sepm-development.git
-(venv) cd sepm-development
+(venv) C:\sepm-development\
 ```
 
 ### Install Dependencies
@@ -138,8 +131,6 @@ Tests can be run by executing the below command in a terminal session within the
 ```bash
 python -m unittest -v
 ```
-
-### User Story Tests
 
 ## Authors
 
