@@ -54,8 +54,8 @@ machine, please execute the following commands in a terminal session.
 ### Clone the GitHub Repository
 
 ```bash
-(venv) git clone git@github.com:AlexGeorgeLain/sepm-development.git
-(venv) cd sepm-development
+git clone git@github.com:AlexGeorgeLain/sepm-development.git
+cd sepm-development
 ```
 
 ### Enter Virtual Environment
@@ -69,14 +69,13 @@ Once you have executed the above commands, the command cursor in your terminal s
 virtual environment name (venv), similar to the example below.
 
 ```bash
-(venv) C:\sepm-development\
+(venv) C:\sepm-development>
 ```
 
 ### Install Dependencies
 
 This project requires a series of external packages (Such as PyGame, PyYaml and PeeWee) in order to assist with specific
-tasks within the game. In order to install the projects dependencies, we have bundled the requirements into a **
-requirements.txt** file in the root directory. These can be installed within the venv by executing the below command:
+tasks within the game. In order to install the projects dependencies, we have bundled the requirements into a **requirements.txt** file in the root directory. These can be installed within the venv by executing the below command:
 
 ```bash
 pip install -r requirements.txt
