@@ -258,9 +258,7 @@ def menu_basic(
         )
         WIN.blit(time_text, (10, HEIGHT - time_text.get_height() - 40))
 
-        time_text = MAIN_FONT.render(
-            f"Record: {track.track_record}s", 1, (0, 0, 0)
-        )
+        time_text = MAIN_FONT.render(f"Record: {track.track_record}s", 1, (0, 0, 0))
         WIN.blit(time_text, (10, HEIGHT - time_text.get_height()))
 
     # displays current user profile at bottom of screen
@@ -1093,18 +1091,14 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             game_loop(clock, track, player_car, computer_car, game_info, player_profile)
 
         # settings button that takes the user to the settings menu when clicked
-        settings_button = Button(
-            "Settings", (0, 0, 0), 250, 300, "menu-button-large"
-        )
+        settings_button = Button("Settings", (0, 0, 0), 250, 300, "menu-button-large")
         if settings_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             settings_loop(
                 clock, track, player_car, computer_car, game_info, player_profile
             )
 
         # high score button that takes the user to the high scores screen when clicked
-        high_scores_button = Button(
-            "records", (0, 0, 0), 250, 400, "menu-button-large"
-        )
+        high_scores_button = Button("records", (0, 0, 0), 250, 400, "menu-button-large")
         if (
             high_scores_button.button_rect.collidepoint(pygame.mouse.get_pos())
             and click
@@ -1114,9 +1108,7 @@ def main_menu(clock, track, player_car, computer_car, game_info, player_profile)
             )
 
         # profiles button that takes users to the profile selection menu when clicked
-        profiles_button = Button(
-            "profiles", (0, 0, 0), 250, 500, "menu-button-large"
-        )
+        profiles_button = Button("profiles", (0, 0, 0), 250, 500, "menu-button-large")
         if profiles_button.button_rect.collidepoint(pygame.mouse.get_pos()) and click:
             profiles_settings(
                 clock, track, player_car, computer_car, game_info, player_profile
