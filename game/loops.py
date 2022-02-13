@@ -1045,7 +1045,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                 .where(models.Profanity.word == name_entry_box.text.lower())
                 .exists()
             ):
-                blit_text_center(WIN, MAIN_FONT, "Username cannot be profanity!")
+                blit_text_center(WIN, MAIN_FONT, "Username cannot contain profanity!")
                 pygame.display.update()
                 pygame.time.wait(2000)
                 name_entry_box.text = ""
