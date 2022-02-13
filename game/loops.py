@@ -95,13 +95,13 @@ class TextBox:
     def __init__(self, text=""):
         self.text = text.lower()
         self.text_colour = (255, 255, 255)
-        self.x = 300
+        self.x = 250
         self.y = 300
-        self.width = 200
+        self.width = 300
         self.height = 50
         self.background_colour = (0, 0, 0)
 
-        self.render_text = MAIN_FONT.render(self.text, 1, self.text_colour)
+        self.render_text = MAIN_FONT.render(self.text.upper(), 1, self.text_colour)
 
         self.textbox_rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
@@ -138,7 +138,7 @@ class TextBox:
             self.text = self.text.lower()
 
         # draws updated text onto text box
-        self.render_text = MAIN_FONT.render(self.text, 1, self.text_colour)
+        self.render_text = MAIN_FONT.render(self.text.upper(), 1, self.text_colour)
 
 
 def quit_game():
@@ -988,7 +988,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                     .where(models.Profanity.word == name_entry_box.text.lower())
                     .exists()
                 ):
-                    blit_text_center(WIN, MAIN_FONT, "username cannot be profanity!")
+                    blit_text_center(WIN, MAIN_FONT, "Username cannot be profanity!")
                     pygame.display.update()
                     pygame.time.wait(2000)
                     name_entry_box.text = ""
@@ -1005,7 +1005,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
             click,
         )
 
-        menu_text("enter new username", 300, 200)
+        menu_text("enter new username", 150, 200)
 
         # draws text box with appropriate text in it
         name_entry_box.draw_textbox()
@@ -1040,7 +1040,7 @@ def create_profile(clock, track, player_car, computer_car, game_info, player_pro
                     .where(models.Profanity.word == name_entry_box.text.lower())
                     .exists()
             ):
-                blit_text_center(WIN, MAIN_FONT, "username cannot be profanity!")
+                blit_text_center(WIN, MAIN_FONT, "Username cannot be profanity!")
                 pygame.display.update()
                 pygame.time.wait(2000)
                 name_entry_box.text = ""
