@@ -147,3 +147,4 @@ This project uses a series of open-sourced assets to form the design and audio o
 
 - Game Icons: [KennyNL Game Icons](https://www.kenney.nl/assets/game-icons)
 - Game Backgrounds/Vehicles: [KennyNL Racing Pack](https://www.kenney.nl/assets/racing-pack)
+- Background Music: [8-Bit March Twin Musicom](http://www.twinmusicom.org/song/80/8-bit-march)
