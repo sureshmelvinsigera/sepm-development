@@ -141,6 +141,9 @@ python -m unittest -v
 - [Suresh Melvin Sigera](https://github.com/sureshmelvinsigera)
 - [Victor Javier Martinez Hernandez](https://github.com/apuleyo3)
 
-## References
+## Attributions
 
-Lorem ipsum dolor sit amet.
+This project uses a series of open-sourced assets to form the design and audio of the Track-Surf game. Links to the original sources have been included below:
+
+- Game Icons: [KennyNL Game Icons](https://www.kenney.nl/assets/game-icons)
+- Game Backgrounds/Vehicles: [KennyNL Racing Pack](https://www.kenney.nl/assets/racing-pack)
