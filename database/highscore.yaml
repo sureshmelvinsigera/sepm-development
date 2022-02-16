@@ -1,0 +1,99 @@
+- model: HighScore
+  name: max
+  time: 55
+  track_id: track_1
+
+- model: HighScore
+  name: esteban
+  time: 56
+  track_id: track_1
+
+- model: HighScore
+  name: daniel
+  time: 57
+  track_id: track_1
+
+- model: HighScore
+  name: lewis
+  time: 58
+  track_id: track_1
+
+- model: HighScore
+  name: lando
+  time: 59
+  track_id: track_1
+
+- model: HighScore
+  name: pierre
+  time: 60
+  track_id: track_1
+
+- model: HighScore
+  name: yuki
+  time: 61
+  track_id: track_1
+
+- model: HighScore
+  name: lance
+  time: 62
+  track_id: track_1
+
+- model: HighScore
+  name: sergio
+  time: 63
+  track_id: track_1
+
+- model: HighScore
+  name: charles
+  time: 64
+  track_id: track_1
+
+- model: HighScore
+  name: max
+  time: 25
+  track_id: track_2
+
+- model: HighScore
+  name: esteban
+  time: 26
+  track_id: track_2
+
+- model: HighScore
+  name: daniel
+  time: 27
+  track_id: track_2
+
+- model: HighScore
+  name: lewis
+  time: 28
+  track_id: track_2
+
+- model: HighScore
+  name: lando
+  time: 29
+  track_id: track_2
+
+- model: HighScore
+  name: pierre
+  time: 30
+  track_id: track_2
+
+- model: HighScore
+  name: yuki
+  time: 31
+  track_id: track_2
+
+- model: HighScore
+  name: lance
+  time: 32
+  track_id: track_2
+
+- model: HighScore
+  name: sergio
+  time: 33
+  track_id: track_2
+
+- model: HighScore
+  name: charles
+  time: 34
+  track_id: track_2

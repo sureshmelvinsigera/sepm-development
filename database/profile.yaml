@@ -1,0 +1,59 @@
+- model: Profile
+  username: default
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: max
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: lewis
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_2
+
+- model: Profile
+  username: george
+  mute: 0
+  last_car_id: blue_car
+  last_track_id: track_1
+
+- model: Profile
+  username: sergio
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_1
+
+- model: Profile
+  username: charles
+  mute: 0
+  last_car_id: red_car
+  last_track_id: track_2
+
+- model: Profile
+  username: carlos
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_2
+
+- model: Profile
+  username: lando
+  mute: 0
+  last_car_id: yellow_car
+  last_track_id: track_1
+
+- model: Profile
+  username: daniel
+  mute: 0
+  last_car_id: blue_car
+  last_track_id: track_2
+
+- model: Profile
+  username: esteban
+  mute: 1
+  last_car_id: green_car
+  last_track_id: track_1

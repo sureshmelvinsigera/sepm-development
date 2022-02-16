@@ -1,0 +1,43 @@
+name: "Fix Repository Styling"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  style-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+          architecture: x64
+
+      - name: Lint Python Code
+        uses: psf/black@stable
+        with:
+            options: "--verbose"
+            src: "./"
+
+      - name: Sort Imports
+        uses: isort/isort-action@master
+        with:
+          isortVersion: 5.10.1
+          requirementsFiles: "requirements.txt"
+          configuration: ""
+
+      - name: Push Restyled Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Fixed Styling using Black and iSort

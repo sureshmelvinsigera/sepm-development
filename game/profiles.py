@@ -1,23 +1,18 @@
 import pygame
-from config import con, cur
+
+from database import models
 
 
 class PlayerProfile:
     def __init__(self, username):
         self.username = username
-        self.mute = cur.execute(
-            """SELECT mute FROM player_profiles WHERE username = ?""", (self.username,)
-        ).fetchone()[0]
-        self.last_car_id = cur.execute(
-            """SELECT last_car_id FROM player_profiles WHERE username = ?""",
-            (self.username,),
-        ).fetchone()[0]
-        self.last_track_id = cur.execute(
-            """SELECT last_track_id FROM player_profiles WHERE username = ?""",
-            (self.username,),
-        ).fetchone()[0]
+        lookup_profile = models.Profile.get(models.Profile.username == username)
+        self.mute = lookup_profile.mute
+        self.last_car_id = lookup_profile.last_car_id
+        self.last_track_id = lookup_profile.last_track_id
 
     def update_mute(self):
+        """Updates the player's mute preference and plays or pauses the music as appropriate."""
         if self.mute:
             self.mute = 0
             pygame.mixer.music.unpause()
@@ -26,28 +21,35 @@ class PlayerProfile:
             pygame.mixer.music.pause()
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET mute = ? WHERE username = ?""",
-                (self.mute, self.username),
+            # updates the players mute preference in the database if the player is not using the default profile.
+            models.Profile.update(mute=self.mute).where(
+                models.Profile.username == self.username
             )
-            con.commit()
 
     def update_last_car_id(self, car_id):
+        """Updates the player's last used car, providing that the player isn't using the default profile.
+
+        Args:
+            car_id -- id of the newly chosen car
+        """
         self.last_car_id = car_id
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET last_car_id = ? WHERE username = ?""",
-                (car_id, self.username),
+            # updates the player's car prerference in the database when if the player is not using the default profile.
+            models.Profile.update(last_car_id=car_id).where(
+                models.Profile.username == self.username
             )
-            con.commit()
 
     def update_last_track_id(self, track_id):
+        """Updates the player's last chosen track, providing that the player isn't using the default profile.
+
+        Args:
+            track_id -- id of the newly chosen track
+        """
         self.last_track_id = track_id
 
         if self.username != "default":
-            cur.execute(
-                """UPDATE player_profiles SET last_track_id = ? WHERE username = ?""",
-                (track_id, self.username),
+            # updates the player's track preference in the database when if the player is not using the default profile.
+            models.Profile.update(last_track_id=track_id).where(
+                models.Profile.username == self.username
             )
-            con.commit()
